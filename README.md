@@ -12,17 +12,18 @@ used in the hopes that all the rest can be archived one day.
 
 ## Projects
 
-### Existing
+### 🏚 Existing
 
 The list of projects that should be brought into this one:
 
 * [Broker][broker]
-* [Control Tool][plantctl]
 * [Command Line Client][plantcli]
+* [Control Tool][plantctl]
 
-### Planned
+### 🏠 Planned
 
 * [Core](core/README.md)
+* [Identity](identity/README.md)
 * [Proxy](proxy/README.md)
 * [State](state/README.md)
 
