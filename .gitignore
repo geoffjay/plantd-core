@@ -1,0 +1,15 @@
+*~
+*.sw[op]
+tags
+
+.env
+.envrc
+
+cert/*.cr[lt]
+cert/*.csr
+cert/*.key
+
+/bin/
+/target/
+/vendor/
+/tmp/
