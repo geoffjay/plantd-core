@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>org.plantd.State</string>
+    <key>ServiceDescription</key>
+    <string>Plantd State Service</string>
+    <key>ProgramArguments</key>
+    <array>             
+      <string><PRODUCT_HOME>/usr/local/bin/plantd-state</string>
+    </array>
+    <key>RunAtLoad</key>
+    <false/>
+  </dict>
+</plist>

@@ -1,0 +1,16 @@
+[Unit]
+Description=Plantd Identity
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+RuntimeDirectory=plantd
+RuntimeDirectoryMode=0755
+PIDFile=/run/plantd/identity.pid
+ExecStart=/usr/bin/plantd-identity
+
+[Install]
+WantedBy=multi-user.target

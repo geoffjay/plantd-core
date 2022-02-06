@@ -1,0 +1,16 @@
+[Unit]
+Description=Plantd Proxy
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+RuntimeDirectory=plantd
+RuntimeDirectoryMode=0755
+PIDFile=/run/plantd/proxy.pid
+ExecStart=/usr/bin/plantd-proxy
+
+[Install]
+WantedBy=multi-user.target
