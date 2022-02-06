@@ -27,6 +27,15 @@ The list of projects that should be brought into this one:
 * [Proxy](proxy/README.md)
 * [State](state/README.md)
 
+## Contributing
+
+It's recommended that some common tooling and commit hooks be installed.
+
+```shell
+./scripts/install-deps
+./scripts/install-hooks
+```
+
 <!-- links -->
 
 [broker]: https://gitlab.com/plantd/broker
