@@ -27,7 +27,7 @@ ifeq ($(SERVICE),)
 	@echo "usage: SERVICE=[Broker|Identity|Proxy|State] make enable-launchd"
 else
 	@launchctl load "$(LAUNCHD_PATH)/org.plantd.$(SERVICE).plist"
-	@echo "start with: \`launchctl start \"org.plantd."$(SERVICE)"\`"
+	@echo "start with: \`launchctl start org.plantd."$(SERVICE)`"
 endif
 
 disable-launchd:

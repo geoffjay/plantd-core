@@ -2,15 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>Label</key>
-    <string>org.plantd.Identity</string>
-    <key>ServiceDescription</key>
-    <string>Plantd Identity Service</string>
+    <key>Label</key>              <string>org.plantd.Identity</string>
+    <key>ServiceDescription</key> <string>Plantd Identity Service</string>
+    <key>Disabled</key>           <false/>
+    <key>RunAtLoad</key>          <true/>
+    <key>KeepAlive</key>          <false/>
+    <key>LaunchOnlyOnce</key>     <true/>
     <key>ProgramArguments</key>
-    <array>             
-      <string><PRODUCT_HOME>/usr/local/bin/plantd-identity</string>
-    </array>
-    <key>RunAtLoad</key>
-    <false/>
+      <array>
+        <string>/usr/local/bin/plantd-identity</string>
+      </array>
   </dict>
 </plist>

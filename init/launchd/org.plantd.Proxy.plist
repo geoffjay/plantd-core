@@ -2,15 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>Label</key>
-    <string>org.plantd.Proxy</string>
-    <key>ServiceDescription</key>
-    <string>Plantd Proxy Service</string>
+    <key>EnvironmentVariables</key>
+      <dict>
+        <key>PORT</key>
+        <string>8080</string>
+      </dict>
+    <key>Label</key>              <string>org.plantd.Proxy</string>
+    <key>ServiceDescription</key> <string>Plantd Proxy Service</string>
+    <key>Disabled</key>           <false/>
+    <key>RunAtLoad</key>          <true/>
+    <key>KeepAlive</key>          <false/>
+    <key>LaunchOnlyOnce</key>     <true/>
     <key>ProgramArguments</key>
-    <array>             
-      <string><PRODUCT_HOME>/usr/local/bin/plantd-proxy</string>
-    </array>
-    <key>RunAtLoad</key>
-    <false/>
+      <array>
+        <string>/usr/local/bin/plantd-proxy</string>
+      </array>
   </dict>
 </plist>
