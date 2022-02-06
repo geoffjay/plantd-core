@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Development dependencies
+
+GO_BIN="$(go env GOPATH)"/bin
+
+function __cmd_check {
+  ! command -v "$1" &>/dev/null
+}
+
+if __cmd_check "$GO_BIN"/golangci-lint; then
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$GO_BIN" v1.41.1
+fi
+
+if __cmd_check "$GO_BIN"/air; then
+  curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b "$GO_BIN"
+fi
+
+if __cmd_check "$GO_BIN"/git-chglog; then
+  go get -u github.com/git-chglog/git-chglog/cmd/git-chglog
+fi
+
+if __cmd_check "$GO_BIN"/tomlv; then
+  go get github.com/BurntSushi/toml/cmd/tomlv
+fi

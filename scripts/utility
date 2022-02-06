@@ -1,0 +1,36 @@
+#!/bin/bash
+
+function __module {
+  echo $(grep module go.mod | sed 's/module.//')
+}
+
+function __go_fmt {
+  printf "%-16s%s\n" "gofmt:" $(__module)
+  gofmt .
+}
+
+# use golangci-lint linters to get the full list
+function __go_lint {
+  printf "%-16s%s\n" "golangci-lint:" $(__module)
+  golangci-lint run
+}
+
+if [ "$#" -ne 2 ]; then
+  echo "Invalid parameter count: <project> and <tool> are required"
+  exit 1
+fi
+
+pushd $2 &> /dev/null
+
+case $1 in
+  "go-fmt"  ) __go_fmt ;;
+  "go-lint" ) __go_lint ;;
+esac
+
+status=$?
+
+popd &> /dev/null
+
+if [ "$status" -ne 0 ]; then
+  exit 1
+fi

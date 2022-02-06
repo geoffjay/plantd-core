@@ -1,0 +1,27 @@
+#!/bin/bash
+
+function _check {
+  if [ $1 -ne 0 ]; then
+    echo "$2 must complete on project $3 before commit"
+    exit 1
+  fi
+}
+
+echo "Running pre-commit hooks"
+
+# TODO: add when broker is brought in
+# ./scripts/utility go-lint broker
+# _check $? "golangci-lint" "broker"
+
+# TODO: add when this is split off of broker
+# ./scripts/utility go-lint core
+# _check $? "golangci-lint" "core"
+
+./scripts/utility go-lint identity
+_check $? "golangci-lint" "identity"
+
+./scripts/utility go-lint proxy
+_check $? "golangci-lint" "proxy"
+
+./scripts/utility go-lint state
+_check $? "golangci-lint" "state"

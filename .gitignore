@@ -4,6 +4,7 @@ tags
 
 .env
 .envrc
+.node-version
 
 cert/*.cr[lt]
 cert/*.csr

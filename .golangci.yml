@@ -1,0 +1,90 @@
+run:
+  tests: true
+
+  skip-files:
+    - broker/pkg/service/const.go
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: true
+  path-prefix: ""
+  sort-results: false
+
+linters:
+  # additional linters that aren't enabled by default
+  enable:
+    - asciicheck
+    - cyclop
+    - dogsled
+    - dupl
+    - errorlint
+    - exhaustive
+    - forbidigo
+    - funlen
+    - goconst
+    - godot
+    - gofmt
+    - gofumpt
+    - goimports
+    - misspell
+    - nestif
+    - revive
+
+linters-settings:
+  cyclop:
+    max-complexity: 10
+    package-average: 0.0
+    skip-tests: false
+
+  dogsled:
+    max-blank-identifiers: 2
+
+  dupl:
+    threshold: 100
+
+  errcheck:
+    check-type-assertions: false
+    check-blank: false
+    ignore: fmt:.*,io/ioutil:^Read.*
+
+  errorlint:
+    errorf: true
+    asserts: true
+    comparison: true
+
+  exhaustive:
+    check-generated: false
+    default-signifies-exhaustive: false
+
+  forbidigo:
+    forbid:
+      - ^print.*$
+      - 'fmt\.Print.*'
+    exclude_godoc_examples: false
+
+  funlen:
+    lines: 60
+    statements: 40
+
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+
+  godot:
+    scope: declarations
+    capital: false
+
+  gofmt:
+    simplify: true
+
+  gofumpt:
+    lang-version: "1.15"
+    extra-rules: false
+
+  goimports:
+    local-prefixes: github.com/geoffjay/plantd-core
+
+  nestif:
+    min-complexity: 4
