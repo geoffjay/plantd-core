@@ -10,6 +10,18 @@ So much of `plantd` related tooling has been spread apart, the purpose of this
 project is to attempt to bring together the `go` services that are actually
 used in the hopes that all the rest can be archived one day.
 
+## Quickstart
+
+```shell
+make
+sudo make install
+# eg. to test one of the services
+LOG_LEVEL=debug PORT=8080 plantd-proxy
+```
+
+For additional service control steps see the contents of `init/` for
+`launchctl` and `systemd` options.
+
 ## Projects
 
 ### 🏚 Existing
