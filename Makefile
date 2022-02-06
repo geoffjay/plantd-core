@@ -24,17 +24,17 @@ build-pre: ; $(info $(M) Building projects...)
 
 build-identity:
 	@pushd identity >/dev/null; \
-	go build -o ../build/plantd-identity $(BUILD_ARGS) main.go; \
+	go build -o ../build/plantd-identity $(BUILD_ARGS) .; \
 	popd >/dev/null
 
 build-proxy:
 	@pushd proxy >/dev/null; \
-	go build -o ../build/plantd-proxy $(BUILD_ARGS) main.go; \
+	go build -o ../build/plantd-proxy $(BUILD_ARGS) .; \
 	popd >/dev/null
 
 build-state:
 	@pushd state >/dev/null; \
-	go build -o ../build/plantd-state $(BUILD_ARGS) main.go; \
+	go build -o ../build/plantd-state $(BUILD_ARGS) .; \
 	popd >/dev/null
 
 clean: ; $(info $(M) Removing build files...)

@@ -2,4 +2,12 @@ module github.com/geoffjay/plantd-core/proxy
 
 go 1.14
 
-require github.com/geoffjay/plantd-core/core v0.0.0-20220206010933-d77901108a42
+require (
+	github.com/geoffjay/plantd-core/core v0.0.0-20220206064530-0e8772b4ac8e
+	github.com/gin-gonic/gin v1.7.7
+	github.com/sirupsen/logrus v1.8.1
+)
+
+replace (
+	github.com/geoffjay/plantd-core/core => ../core
+)
