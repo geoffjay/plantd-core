@@ -61,7 +61,6 @@ linters-settings:
   forbidigo:
     forbid:
       - ^print.*$
-      - 'fmt\.Print.*'
     exclude_godoc_examples: false
 
   funlen:

@@ -31,9 +31,9 @@ The list of projects that should be brought into this one:
 
 It's recommended that some common tooling and commit hooks be installed.
 
+
 ```shell
-./scripts/install-deps
-./scripts/install-hooks
+make setup
 ```
 
 <!-- links -->

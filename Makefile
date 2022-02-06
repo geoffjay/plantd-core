@@ -17,11 +17,25 @@ lint: ; $(info $(M) Lint projects...)
 	@./scripts/utility go-lint proxy
 	@./scripts/utility go-lint state
 
-build: ; $(info $(M) Building projects...)
+build: build-pre build-identity build-proxy build-state
+
+build-pre: ; $(info $(M) Building projects...)
 	@mkdir -p build/
-	@go build -o build/plantd-identity $(BUILD_ARGS) identity/main.go
-	@go build -o build/plantd-proxy $(BUILD_ARGS) proxy/main.go
-	@go build -o build/plantd-state $(BUILD_ARGS) state/main.go
+
+build-identity:
+	@pushd identity >/dev/null; \
+	go build -o ../build/plantd-identity $(BUILD_ARGS) main.go; \
+	popd >/dev/null
+
+build-proxy:
+	@pushd proxy >/dev/null; \
+	go build -o ../build/plantd-proxy $(BUILD_ARGS) main.go; \
+	popd >/dev/null
+
+build-state:
+	@pushd state >/dev/null; \
+	go build -o ../build/plantd-state $(BUILD_ARGS) main.go; \
+	popd >/dev/null
 
 clean: ; $(info $(M) Removing build files...)
 	@rm -rf build/
