@@ -2,9 +2,9 @@ M := $(shell printf "\033[34;1m▶\033[0m")
 VERSION := $(shell git describe 2>/dev/null || echo "undefined")
 BUILD_ARGS := -ldflags "-X core.VERSION=$(VERSION)"
 
--include init/setup.mk
-
 all: build
+
+-include init/setup.mk
 
 setup: deps hooks
 
@@ -39,9 +39,11 @@ build-state:
 	go build -o ../build/plantd-state $(BUILD_ARGS) .; \
 	popd >/dev/null
 
-install-macos: identity proxy state
-	@echo $<
-	# @install build/plantd-identity "/usr/local/bin/plantd-identity"
+install: ; $(info $(M) Installing binaries...)
+	@install build/plantd-* /usr/local/bin/
+
+uninstall: ; $(info $(M) Uninstalling binaries...)
+	@rm /usr/local/bin/plantd-*
 
 clean: ; $(info $(M) Removing build files...)
 	@rm -rf build/
