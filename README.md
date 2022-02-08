@@ -1,3 +1,7 @@
+[![License MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://img.shields.io/badge/License-MIT-brightgreen.svg)
+
+---
+
 # Plantd
 
 Core services for building distributed control systems.

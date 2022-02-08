@@ -1,3 +1,7 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd-core/proxy)](https://goreportcard.com/report/github.com/geoffjay/plantd-core/proxy)
+
+---
+
 # 📨 Proxy Service
 
 Underlying services in a `plantd` network use a ZeroMQ API that isn't a lot of

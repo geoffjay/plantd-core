@@ -1,3 +1,7 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd-core/state)](https://goreportcard.com/report/github.com/geoffjay/plantd-core/state)
+
+---
+
 # 🗄 Distributed State Management
 
 Currently, modules that exist in a `plantd` network manage their own state and

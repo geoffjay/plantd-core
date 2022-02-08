@@ -1,3 +1,7 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd-core/identity)](https://goreportcard.com/report/github.com/geoffjay/plantd-core/identity)
+
+---
+
 # 🥸 Identity Service
 
 Idea stage, doesn't exist.
