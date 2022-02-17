@@ -10,6 +10,9 @@ cert/*.cr[lt]
 cert/*.csr
 cert/*.key
 
+# plantd-state
+*.db
+
 /bin/
 /build/
 /target/

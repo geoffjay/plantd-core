@@ -39,6 +39,16 @@ build-state:
 	go build -o ../build/plantd-state $(BUILD_ARGS) .; \
 	popd >/dev/null
 
+test: test-pre test-state
+
+test-pre: ; $(info $(M) Testing projects...)
+
+test-state:
+	@pushd state >/dev/null; \
+	go get -t ./...; \
+	go test ./... -v; \
+	popd >/dev/null
+
 install: ; $(info $(M) Installing binaries...)
 	@install build/plantd-* /usr/local/bin/
 

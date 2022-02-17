@@ -26,7 +26,6 @@ linters:
     - goconst
     - godot
     - gofmt
-    - gofumpt
     - goimports
     - misspell
     - nestif
@@ -77,10 +76,6 @@ linters-settings:
 
   gofmt:
     simplify: true
-
-  gofumpt:
-    lang-version: "1.15"
-    extra-rules: false
 
   goimports:
     local-prefixes: github.com/geoffjay/plantd-core
