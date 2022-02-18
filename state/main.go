@@ -8,9 +8,9 @@ import (
 	"regexp"
 	"sync"
 	"syscall"
-	"time"
 
-	"github.com/geoffjay/plantd-core/core"
+	"github.com/geoffjay/plantd/core"
+	"github.com/geoffjay/plantd/core/util"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -19,50 +19,30 @@ func main() {
 	processArgs()
 	initLogging()
 
-	store := NewStore()
-	path := core.Getenv("PLANTD_STATE_DB", "plantd-state.db")
-	if err := store.Load(path); err != nil {
-		log.Error(err)
-	}
-	defer store.Unload()
+	service := NewService()
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	wg := &sync.WaitGroup{}
 
 	wg.Add(1)
-	go run(ctx, wg)
+	go service.Run(ctx, wg)
 
-	log.WithFields(log.Fields{"scope": "main"}).Debug("starting")
+	log.WithFields(log.Fields{"context": "main"}).Debug("starting")
 
 	termChan := make(chan os.Signal, 1)
 	signal.Notify(termChan, syscall.SIGINT, syscall.SIGTERM)
 	<-termChan
 
-	log.WithFields(log.Fields{"scope": "main"}).Debug("terminated")
+	log.WithFields(log.Fields{"context": "main"}).Debug("terminated")
 
 	cancelFunc()
 	wg.Wait()
 
-	log.WithFields(log.Fields{"scope": "main"}).Debug("exiting")
-}
-
-func run(ctx context.Context, wg *sync.WaitGroup) {
-	defer wg.Done()
-	log.WithFields(log.Fields{"scope": "run"}).Debug("starting")
-
-	go func() {
-		for {
-			time.Sleep(10 * time.Second)
-			log.WithFields(log.Fields{"scope": "run"}).Debug("processing")
-		}
-	}()
-
-	<-ctx.Done()
-	log.WithFields(log.Fields{"scope": "run"}).Debug("exiting")
+	log.WithFields(log.Fields{"context": "main"}).Debug("exiting")
 }
 
 func initLogging() {
-	level := core.Getenv("PLANTD_STATE_LOG_LEVEL", "info")
+	level := util.Getenv("PLANTD_STATE_LOG_LEVEL", "info")
 	if logLevel, err := log.ParseLevel(level); err == nil {
 		log.SetLevel(logLevel)
 	}

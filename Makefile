@@ -15,6 +15,7 @@ hooks: ; $(info $(M) Installing commit hooks...)
 	@./scripts/install-hooks
 
 lint: ; $(info $(M) Lint projects...)
+	@./scripts/utility go-lint core
 	@./scripts/utility go-lint identity
 	@./scripts/utility go-lint proxy
 	@./scripts/utility go-lint state
@@ -45,7 +46,6 @@ test-pre: ; $(info $(M) Testing projects...)
 
 test-state:
 	@pushd state >/dev/null; \
-	go get -t ./...; \
 	go test ./... -v; \
 	popd >/dev/null
 

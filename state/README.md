@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd-core/state)](https://goreportcard.com/report/github.com/geoffjay/plantd-core/state)
+[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd/state)](https://goreportcard.com/report/github.com/geoffjay/plantd/state)
 
 ---
 

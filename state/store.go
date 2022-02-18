@@ -47,7 +47,7 @@ func (s *Store) CreateScope(scope string) (err error) {
 		return err
 	}
 	defer func() {
-		err = tx.Rollback()
+		_ = tx.Rollback()
 	}()
 
 	if _, err = tx.CreateBucketIfNotExists([]byte(scope)); err != nil {
@@ -68,7 +68,7 @@ func (s *Store) DeleteScope(scope string) (err error) {
 		return err
 	}
 	defer func() {
-		err = tx.Rollback()
+		_ = tx.Rollback()
 	}()
 
 	if err = tx.DeleteBucket([]byte(scope)); err != nil {
