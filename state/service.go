@@ -13,13 +13,23 @@ import (
 )
 
 type Service struct {
-	store  *Store
-	sink   *bus.Sink
-	worker *mdp.Worker
+	handler *Handler
+	store   *Store
+	sink    *bus.Sink
+	worker  *mdp.Worker
 }
 
 func NewService() *Service {
 	return &Service{}
+}
+
+func (s *Service) setupHandler() {
+	s.handler = NewHandler()
+	s.RegisterCallback("create-scope", &createScopeCallback{name: "create-scope", store: s.store})
+	s.RegisterCallback("delete-scope", &deleteScopeCallback{name: "delete-scope", store: s.store})
+	s.RegisterCallback("delete", &deleteCallback{name: "delete", store: s.store})
+	s.RegisterCallback("get", &getCallback{name: "get", store: s.store})
+	s.RegisterCallback("set", &setCallback{name: "set", store: s.store})
 }
 
 func (s *Service) setupStore() {
@@ -28,7 +38,6 @@ func (s *Service) setupStore() {
 	if err := s.store.Load(path); err != nil {
 		log.WithFields(log.Fields{"err": err}).Panic("failed to setup KV store")
 	}
-	defer s.store.Unload()
 }
 
 func (s *Service) setupWorker() {
@@ -43,10 +52,14 @@ func (s *Service) setupSink() {
 	s.sink = bus.NewSink()
 }
 
+// Run handles the service execution
 func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 	s.setupStore()
+	s.setupHandler()
 	s.setupSink()
 	s.setupWorker()
+
+	defer s.store.Unload()
 
 	defer wg.Done()
 	log.WithFields(log.Fields{"context": "run"}).Debug("starting")
@@ -55,9 +68,10 @@ func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 	go s.runSink(ctx, wg)
 	go s.runWorker(ctx, wg)
 
+	// this is unnecessary, just here for testing
 	go func() {
 		for {
-			time.Sleep(10 * time.Second)
+			time.Sleep(30 * time.Second)
 			log.WithFields(log.Fields{"context": "run"}).Debug("processing")
 		}
 	}()
@@ -70,7 +84,9 @@ func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 func (s *Service) runSink(ctx context.Context, wg *sync.WaitGroup) {
 	defer wg.Done()
 
+	// this is unnecessary, just here for testing
 	go func() {
+		// TODO: manage receiving events on the bus sink
 		for {
 			log.WithFields(log.Fields{"context": "sink"}).Debug("listening")
 			time.Sleep(10 * time.Second)
@@ -89,15 +105,13 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 
 	go func() {
 		var request, reply []string
-		for {
-			if s.worker.Terminated() {
-				break
-			}
-
+		for !s.worker.Terminated() {
 			log.WithFields(log.Fields{"context": "worker"}).Debug("waiting for request")
+
 			if request, err = s.worker.Recv(reply); err != nil {
 				log.WithFields(log.Fields{"error": err}).Error("failed while receiving request")
 			}
+
 			log.WithFields(log.Fields{"context": "worker", "request": request}).Debug("received request")
 
 			if len(request) == 0 {
@@ -105,16 +119,37 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 				continue
 			}
 
-			// msgType := request[0]
+			msgType := request[0]
 
 			// Reset reply
 			reply = []string{}
 
 			for _, part := range request[1:] {
-				log.WithFields(log.Fields{"context": "worker", "part": part}).Debug("processing message")
-				// Reply with an empty response for now
-				reply = append(reply, "{}")
+				log.WithFields(log.Fields{
+					"context": "worker",
+					"part":    part,
+				}).Debug("processing message")
+				var data []byte
+				switch msgType {
+				case "create-scope", "delete-scope", "delete", "get", "set":
+					log.Tracef("part: %s", part)
+					if data, err = s.handler.callbacks[msgType].Execute(part); err != nil {
+						log.WithFields(log.Fields{
+							"context": "worker",
+							"type":    msgType,
+							"error":   err,
+						}).Warn("message failed")
+						break
+					}
+					log.Tracef("data: %s", data)
+				default:
+					log.Error("invalid message type provided")
+				}
+
+				reply = append(reply, string(data))
 			}
+
+			log.Tracef("reply: %+v", reply)
 		}
 	}()
 
@@ -122,4 +157,8 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 	s.worker.Shutdown()
 
 	log.WithFields(log.Fields{"context": "worker"}).Debug("exiting")
+}
+
+func (s *Service) RegisterCallback(name string, callback HandlerCallback) {
+	s.handler.AddCallback(name, callback)
 }

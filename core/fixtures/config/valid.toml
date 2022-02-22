@@ -1,0 +1,5 @@
+env = "testing"
+
+[object]
+is-test = true
+test = "config"

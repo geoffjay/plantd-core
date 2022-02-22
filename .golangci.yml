@@ -65,6 +65,8 @@ linters-settings:
   funlen:
     lines: 60
     statements: 40
+    ignored-files:
+      - "*_test.go"
 
   goconst:
     min-len: 3

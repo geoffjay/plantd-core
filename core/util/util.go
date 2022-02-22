@@ -26,3 +26,22 @@ func Unwrap(msg []string) (head string, tail []string) {
 	}
 	return
 }
+
+// Contains returns `true` if `value` was found in `arr`, `false` otherwise.
+func Contains(arr []string, value string) bool {
+	for _, a := range arr {
+		if a == value {
+			return true
+		}
+	}
+	return false
+}
+
+// Keys returns a slice of strings from the given map `kv`.
+func Keys(kv map[string]string) []string {
+	list := make([]string, 0, len(kv))
+	for k := range kv {
+		list = append(list, k)
+	}
+	return list
+}

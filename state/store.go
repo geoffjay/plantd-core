@@ -1,6 +1,9 @@
 package main
 
 import (
+	"errors"
+	"fmt"
+
 	log "github.com/sirupsen/logrus"
 	bolt "go.etcd.io/bbolt"
 )
@@ -97,8 +100,15 @@ func (s *Store) DebugScope(scope string) {
 
 // Get a value at `key` in the bucket named `scope`.
 func (s *Store) Get(scope, key string) (value string, err error) {
+	log.WithFields(log.Fields{
+		"scope": scope,
+		"key":   key,
+	}).Trace("KV get")
 	err = s.db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(scope))
+		if bucket == nil {
+			return errors.New(fmt.Sprintf("scope `%s` doesn't exist", scope))
+		}
 		value = string(bucket.Get([]byte(key)))
 		return nil
 	})
@@ -107,9 +117,36 @@ func (s *Store) Get(scope, key string) (value string, err error) {
 
 // Set `value` at `key` in the bucket named `scope`.
 func (s *Store) Set(scope, key, value string) (err error) {
+	log.WithFields(log.Fields{
+		"scope": scope,
+		"key":   key,
+		"value": value,
+	}).Trace("KV set")
 	err = s.db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(scope))
+		if bucket == nil {
+			if err := s.CreateScope(scope); err != nil {
+				return err
+			}
+		}
 		err := bucket.Put([]byte(key), []byte(value))
+		return err
+	})
+	return
+}
+
+// Delete `key` in the bucket named `scope`.
+func (s *Store) Delete(scope, key string) (err error) {
+	log.WithFields(log.Fields{
+		"scope": scope,
+		"key":   key,
+	}).Trace("KV delete")
+	err = s.db.Update(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte(scope))
+		if bucket == nil {
+			return errors.New(fmt.Sprintf("scope `%s` doesn't exist", scope))
+		}
+		err := bucket.Delete([]byte(key))
 		return err
 	})
 	return
