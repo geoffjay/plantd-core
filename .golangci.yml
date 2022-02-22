@@ -26,7 +26,6 @@ linters:
     - goconst
     - godot
     - gofmt
-    - gofumpt
     - goimports
     - misspell
     - nestif
@@ -66,6 +65,8 @@ linters-settings:
   funlen:
     lines: 60
     statements: 40
+    ignored-files:
+      - "*_test.go"
 
   goconst:
     min-len: 3
@@ -78,12 +79,8 @@ linters-settings:
   gofmt:
     simplify: true
 
-  gofumpt:
-    lang-version: "1.15"
-    extra-rules: false
-
   goimports:
-    local-prefixes: github.com/geoffjay/plantd-core
+    local-prefixes: github.com/geoffjay/plantd
 
   nestif:
     min-complexity: 4

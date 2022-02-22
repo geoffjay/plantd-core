@@ -10,7 +10,8 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/geoffjay/plantd-core/core"
+	"github.com/geoffjay/plantd/core"
+	"github.com/geoffjay/plantd/core/util"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -19,8 +20,8 @@ func main() {
 	processArgs()
 	initLogging()
 
-	port, _ := strconv.Atoi(core.Getenv("PORT", "5000"))
-	bind := core.Getenv("ADDRESS", "0.0.0.0")
+	port, _ := strconv.Atoi(util.Getenv("PORT", "5000"))
+	bind := util.Getenv("ADDRESS", "0.0.0.0")
 	app := NewService(port, bind)
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
@@ -44,7 +45,7 @@ func main() {
 }
 
 func initLogging() {
-	level := core.Getenv("LOG_LEVEL", "info")
+	level := util.Getenv("LOG_LEVEL", "info")
 	if logLevel, err := log.ParseLevel(level); err == nil {
 		log.SetLevel(logLevel)
 	}

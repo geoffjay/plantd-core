@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd-core/core)](https://goreportcard.com/report/github.com/geoffjay/plantd-core/core)
+[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd/core)](https://goreportcard.com/report/github.com/geoffjay/plantd/core)
 
 ---
 

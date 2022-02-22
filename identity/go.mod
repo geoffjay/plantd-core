@@ -1,3 +1,3 @@
-module github.com/geoffjay/plantd-core/identity
+module github.com/geoffjay/plantd/identity
 
 go 1.14

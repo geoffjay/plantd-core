@@ -1,0 +1,27 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "make build-state"
+bin = "build/plantd-state"
+full_bin = "PLANTD_STATE_LOG_LEVEL=debug build/plantd-state"
+include_ext = ["go"]
+exclude_dir = ["build", "tmp", "broker", "client", "identity", "proxy", "docs", "init", "scripts", "notebooks"]
+exclude_regex = ["_test.go"]
+exclude_unchanged = true
+delay = 1000 # ms
+stop_on_error = true
+log = "air.log"
+send_interrupt = true
+
+[log]
+time = false
+
+[color]
+main = "magenta"
+watcher = "cyan"
+build = "yellow"
+runner = "green"
+
+[misc]
+clean_on_exit = true

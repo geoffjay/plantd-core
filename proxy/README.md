@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd-core/proxy)](https://goreportcard.com/report/github.com/geoffjay/plantd-core/proxy)
+[![Go Report Card](https://goreportcard.com/badge/github.com/geoffjay/plantd/proxy)](https://goreportcard.com/report/github.com/geoffjay/plantd/proxy)
 
 ---
 
