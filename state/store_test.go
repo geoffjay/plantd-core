@@ -12,48 +12,48 @@ type StoreTestSuite struct {
 	store *Store
 }
 
-func (s *StoreTestSuite) SetupSuite() {
-	s.scope = "org.plantd.State.Test"
-	s.store = NewStore()
-	if err := s.store.Load("/tmp/test.db"); err != nil {
-		panic(err)
-	}
-	if err := s.store.CreateScope(s.scope); err != nil {
-		panic(err)
-	}
-}
-
-func (s *StoreTestSuite) TearDownSuite() {
-	if err := s.store.DeleteScope(s.scope); err != nil {
-		panic(err)
-	}
-	s.store.Unload()
-}
-
 func TestStoreTestSuite(t *testing.T) {
 	suite.Run(t, new(StoreTestSuite))
 }
 
-func (s *StoreTestSuite) TestStore_GetMissingKey() {
-	value, err := s.store.Get("org.plantd.State.Test", "missing")
+func (suite *StoreTestSuite) SetupSuite() {
+	suite.scope = "org.plantd.State.Test"
+	suite.store = NewStore()
+	if err := suite.store.Load("/tmp/test.db"); err != nil {
+		panic(err)
+	}
+	if err := suite.store.CreateScope(suite.scope); err != nil {
+		panic(err)
+	}
+}
+
+func (suite *StoreTestSuite) TearDownSuite() {
+	if err := suite.store.DeleteScope(suite.scope); err != nil {
+		panic(err)
+	}
+	suite.store.Unload()
+}
+
+func (suite *StoreTestSuite) TestStore_GetMissingKey() {
+	value, err := suite.store.Get("org.plantd.State.Test", "missing")
 	suite.Nil(err)
 	suite.Equal(value, "")
 }
 
-func (s *StoreTestSuite) TestStore_SetGet() {
-	err := s.store.Set("org.plantd.State.Test", "foo", "bar")
+func (suite *StoreTestSuite) TestStore_SetGet() {
+	err := suite.store.Set("org.plantd.State.Test", "foo", "bar")
 	suite.Nil(err)
-	value, err := s.store.Get("org.plantd.State.Test", "foo")
+	value, err := suite.store.Get("org.plantd.State.Test", "foo")
 	suite.Nil(err)
 	suite.Equal(value, "bar")
 }
 
-func (s *StoreTestSuite) TestStore_Scope() {
+func (suite *StoreTestSuite) TestStore_Scope() {
 	var err error
-	err = s.store.CreateScope("test")
+	err = suite.store.CreateScope("test")
 	suite.Nil(err, err)
-	err = s.store.DeleteScope("fake")
+	err = suite.store.DeleteScope("fake")
 	suite.NotNil(err, err)
-	err = s.store.DeleteScope("test")
+	err = suite.store.DeleteScope("test")
 	suite.Nil(err, err)
 }

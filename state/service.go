@@ -12,6 +12,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Service defines the service type.
 type Service struct {
 	handler *Handler
 	store   *Store
@@ -19,6 +20,7 @@ type Service struct {
 	worker  *mdp.Worker
 }
 
+// NewService creates an instance of the service.
 func NewService() *Service {
 	return &Service{}
 }
@@ -52,7 +54,7 @@ func (s *Service) setupSink() {
 	s.sink = bus.NewSink()
 }
 
-// Run handles the service execution
+// Run handles the service execution.
 func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 	s.setupStore()
 	s.setupHandler()
@@ -159,6 +161,7 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 	log.WithFields(log.Fields{"context": "worker"}).Debug("exiting")
 }
 
+// RegisterCallback is a pointless wrapper around the handler.
 func (s *Service) RegisterCallback(name string, callback HandlerCallback) {
 	s.handler.AddCallback(name, callback)
 }

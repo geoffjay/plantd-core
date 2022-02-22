@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 
 	log "github.com/sirupsen/logrus"
@@ -107,7 +106,7 @@ func (s *Store) Get(scope, key string) (value string, err error) {
 	err = s.db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(scope))
 		if bucket == nil {
-			return errors.New(fmt.Sprintf("scope `%s` doesn't exist", scope))
+			return fmt.Errorf("scope `%s` doesn't exist", scope)
 		}
 		value = string(bucket.Get([]byte(key)))
 		return nil
@@ -144,7 +143,7 @@ func (s *Store) Delete(scope, key string) (err error) {
 	err = s.db.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(scope))
 		if bucket == nil {
-			return errors.New(fmt.Sprintf("scope `%s` doesn't exist", scope))
+			return fmt.Errorf("scope `%s` doesn't exist", scope)
 		}
 		err := bucket.Delete([]byte(key))
 		return err
