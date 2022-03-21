@@ -35,6 +35,10 @@ type setCallback struct {
 	store *Store
 }
 
+type sinkCallback struct {
+	store *Store
+}
+
 // Execute callback function to handle `create-scope` requests.
 func (cb *createScopeCallback) Execute(msgBody string) ([]byte, error) {
 	var (
@@ -210,4 +214,10 @@ func (cb *setCallback) Execute(msgBody string) ([]byte, error) {
 
 	log.Tracef("value: %s", value)
 	return []byte(`{"key": "` + key + `", "value": "` + value + `"}`), nil
+}
+
+// Callback handles subscriber events on the state bus.
+func (cb *sinkCallback) Handle(data []byte) error {
+	log.WithFields(log.Fields{"data": data}).Debugf("data received on state bus")
+	return nil
 }

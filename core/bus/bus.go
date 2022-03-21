@@ -2,6 +2,7 @@ package bus
 
 import (
 	"context"
+	"errors"
 	"sync"
 	"time"
 
@@ -94,10 +95,11 @@ func (b *Bus) Run(done chan bool) {
 		"endpoint": b.capture,
 	}).Info("capture connected")
 
+	log.WithFields(log.Fields{"bus": b.name}).Info("proxy blocking")
 	<-doneCapture
 
-	log.WithFields(log.Fields{"bus": b.name}).Info("proxy stopped")
 	done <- true
+	log.WithFields(log.Fields{"bus": b.name}).Info("proxy exiting")
 }
 
 // Start launches the PUB/SUB bus.
@@ -110,14 +112,18 @@ func (b *Bus) Start(ctx context.Context, wg *sync.WaitGroup) error {
 	go func() {
 		var err error
 
-		time.Sleep(100 * time.Millisecond)
 		proxy := czmq.NewProxy()
+		if proxy == nil {
+			err = errors.New("failed to create proxy")
+			log.Error(err)
+			errc <- err
+		}
 		defer proxy.Destroy()
 
 		fields := log.Fields{
 			"bus":      b.name,
-			"frontend": b.frontend,
 			"backend":  b.backend,
+			"frontend": b.frontend,
 			"capture":  b.capture,
 		}
 
@@ -133,11 +139,11 @@ func (b *Bus) Start(ctx context.Context, wg *sync.WaitGroup) error {
 		}
 		log.WithFields(fields).Info("backend connected")
 
-		//if err = proxy.SetCapture(b.capture); err != nil {
-		//	log.WithFields(fields).Error("failed to connect capture to proxy")
-		//	errc <- err
-		//}
-		//log.WithFields(log.Fields{"bus": b.name, "endpoint": b.capture}).Info("capture connected")
+		if err = proxy.SetCapture(b.capture); err != nil {
+			log.WithFields(fields).Error("failed to connect capture to proxy")
+			errc <- err
+		}
+		log.WithFields(log.Fields{"bus": b.name, "endpoint": b.capture}).Info("capture connected")
 
 		<-done
 	}()

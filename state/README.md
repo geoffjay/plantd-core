@@ -73,3 +73,20 @@ for message in messages:
     response = client.recv_response()
     print(f"{message[0]}: {response}")
 ```
+
+The data sink can be tested with a source from `libplantd`.
+
+```python
+import time
+
+# eg. if,
+# frontend (XSUB) on @tcp://127.0.0.1:11000
+# backend  (XPUB) on @tcp://127.0.0.1:11001 - plantd-state should be connected here
+
+source = Pd.Source.new(">tcp://localhost:11000", "")
+source.start()
+for i in range(10):
+    source.queue_message(f"{\"key\":\"foo\",\"value\":\"{i}\"}")
+    time.sleep(.5)
+source.stop()
+```

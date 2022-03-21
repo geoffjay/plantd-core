@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"sync"
-	"time"
 
 	"github.com/geoffjay/plantd/core/bus"
 	"github.com/geoffjay/plantd/core/mdp"
@@ -51,7 +50,8 @@ func (s *Service) setupWorker() {
 }
 
 func (s *Service) setupSink() {
-	s.sink = bus.NewSink()
+	s.sink = bus.NewSink(">tcp://localhost:11001", "")
+	s.sink.SetHandler(&bus.SinkHandler{Callback: &sinkCallback{store: s.store}})
 }
 
 // Run handles the service execution.
@@ -62,42 +62,18 @@ func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 	s.setupWorker()
 
 	defer s.store.Unload()
+	defer s.sink.Stop()
 
 	defer wg.Done()
 	log.WithFields(log.Fields{"context": "run"}).Debug("starting")
 
 	wg.Add(2)
-	go s.runSink(ctx, wg)
+	go s.sink.Run(ctx, wg)
 	go s.runWorker(ctx, wg)
-
-	// this is unnecessary, just here for testing
-	go func() {
-		for {
-			time.Sleep(30 * time.Second)
-			log.WithFields(log.Fields{"context": "run"}).Debug("processing")
-		}
-	}()
 
 	<-ctx.Done()
 
 	log.WithFields(log.Fields{"context": "run"}).Debug("exiting")
-}
-
-func (s *Service) runSink(ctx context.Context, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	// this is unnecessary, just here for testing
-	go func() {
-		// TODO: manage receiving events on the bus sink
-		for {
-			log.WithFields(log.Fields{"context": "sink"}).Debug("listening")
-			time.Sleep(10 * time.Second)
-		}
-	}()
-
-	<-ctx.Done()
-
-	log.WithFields(log.Fields{"context": "worker"}).Debug("exiting")
 }
 
 func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
