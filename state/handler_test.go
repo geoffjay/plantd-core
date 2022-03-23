@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -28,12 +29,13 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.handler.AddCallback("test", &testCallback{name: "test"})
 }
 
+//nolint: typecheck
 func (suite *HandlerTestSuite) TestHandler_Get() {
 	callback, err := suite.handler.GetCallback("test")
-	suite.NotNil(callback, "callback exists for `test`")
-	suite.Nil(err, "callback retrieve failed")
+	assert.NotNil(suite.T(), callback, "callback exists for `test`")
+	assert.Nil(suite.T(), err, "callback retrieve failed")
 	callback, err = suite.handler.GetCallback("foo")
-	suite.Nil(callback, "callback doesn't exist for `foo`")
-	suite.NotNil(err, "callback retrieval failed for unavailable name")
-	suite.Equal(err.Error(), "callback not found for foo")
+	assert.Nil(suite.T(), callback, "callback doesn't exist for `foo`")
+	assert.NotNil(suite.T(), err, "callback retrieval failed for unavailable name")
+	assert.Equal(suite.T(), err.Error(), "callback not found for foo")
 }

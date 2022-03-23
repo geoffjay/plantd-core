@@ -54,3 +54,14 @@ func TestUnwrap(t *testing.T) {
 	assert.Equal(t, "bar", tail[0])
 	assert.Equal(t, "baz", tail[1])
 }
+
+func TestKeys(t *testing.T) {
+	list := make(map[string]string)
+	list["foo"] = "a"
+	list["bar"] = "b"
+	list["baz"] = "c"
+
+	keys := Keys(list)
+
+	assert.ElementsMatch(t, []string{"foo", "bar", "baz"}, keys)
+}

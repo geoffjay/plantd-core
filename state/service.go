@@ -4,7 +4,6 @@ import (
 	"context"
 	"sync"
 
-	"github.com/geoffjay/plantd/core/bus"
 	"github.com/geoffjay/plantd/core/mdp"
 	"github.com/geoffjay/plantd/core/util"
 
@@ -14,23 +13,16 @@ import (
 // Service defines the service type.
 type Service struct {
 	handler *Handler
+	manager *Manager
 	store   *Store
-	sink    *bus.Sink
 	worker  *mdp.Worker
 }
 
 // NewService creates an instance of the service.
 func NewService() *Service {
-	return &Service{}
-}
-
-func (s *Service) setupHandler() {
-	s.handler = NewHandler()
-	s.RegisterCallback("create-scope", &createScopeCallback{name: "create-scope", store: s.store})
-	s.RegisterCallback("delete-scope", &deleteScopeCallback{name: "delete-scope", store: s.store})
-	s.RegisterCallback("delete", &deleteCallback{name: "delete", store: s.store})
-	s.RegisterCallback("get", &getCallback{name: "get", store: s.store})
-	s.RegisterCallback("set", &setCallback{name: "set", store: s.store})
+	return &Service{
+		manager: NewManager(">tcp://localhost:11001"),
+	}
 }
 
 func (s *Service) setupStore() {
@@ -41,39 +33,53 @@ func (s *Service) setupStore() {
 	}
 }
 
+func (s *Service) setupHandler() {
+	s.handler = NewHandler()
+	s.RegisterCallback("create-scope", &createScopeCallback{name: "create-scope", store: s.store, manager: s.manager})
+	s.RegisterCallback("delete-scope", &deleteScopeCallback{name: "delete-scope", store: s.store, manager: s.manager})
+	s.RegisterCallback("delete", &deleteCallback{name: "delete", store: s.store})
+	s.RegisterCallback("get", &getCallback{name: "get", store: s.store})
+	s.RegisterCallback("set", &setCallback{name: "set", store: s.store})
+}
+
 func (s *Service) setupWorker() {
 	var err error
 	if s.worker, err = mdp.NewWorker("tcp://127.0.0.1:7200", "org.plantd.State"); err != nil {
 		log.WithFields(log.Fields{"err": err}).Panic("failed to setup message queue worker")
 	}
-	defer s.worker.Close()
 }
 
-func (s *Service) setupSink() {
-	s.sink = bus.NewSink(">tcp://localhost:11001", "")
-	s.sink.SetHandler(&bus.SinkHandler{Callback: &sinkCallback{store: s.store}})
+func (s *Service) setupConsumers() {
+	if s.store == nil {
+		log.Panic("data store must be available for state sinks")
+	}
+	for _, scope := range s.store.ListAllScope() {
+		log.WithFields(log.Fields{"scope": scope}).Debug("creating sink for scope")
+		s.manager.AddSink(scope, &sinkCallback{store: s.store})
+	}
 }
 
 // Run handles the service execution.
 func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 	s.setupStore()
 	s.setupHandler()
-	s.setupSink()
+	s.setupConsumers()
 	s.setupWorker()
 
 	defer s.store.Unload()
-	defer s.sink.Stop()
+	defer s.worker.Close()
+	defer s.manager.Shutdown()
 
 	defer wg.Done()
-	log.WithFields(log.Fields{"context": "run"}).Debug("starting")
+	log.WithFields(log.Fields{"context": "service.run"}).Debug("starting")
 
 	wg.Add(2)
-	go s.sink.Run(ctx, wg)
+	go s.manager.Run(ctx, wg)
 	go s.runWorker(ctx, wg)
 
 	<-ctx.Done()
 
-	log.WithFields(log.Fields{"context": "run"}).Debug("exiting")
+	log.WithFields(log.Fields{"context": "service.run"}).Debug("exiting")
 }
 
 func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
@@ -84,16 +90,16 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 	go func() {
 		var request, reply []string
 		for !s.worker.Terminated() {
-			log.WithFields(log.Fields{"context": "worker"}).Debug("waiting for request")
+			log.WithFields(log.Fields{"context": "service.worker"}).Debug("waiting for request")
 
 			if request, err = s.worker.Recv(reply); err != nil {
 				log.WithFields(log.Fields{"error": err}).Error("failed while receiving request")
 			}
 
-			log.WithFields(log.Fields{"context": "worker", "request": request}).Debug("received request")
+			log.WithFields(log.Fields{"context": "service.worker", "request": request}).Debug("received request")
 
 			if len(request) == 0 {
-				log.WithFields(log.Fields{"context": "worker"}).Debug("received request is empty")
+				log.WithFields(log.Fields{"context": "service.worker"}).Debug("received request is empty")
 				continue
 			}
 

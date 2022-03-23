@@ -45,9 +45,14 @@ build-state:
 	go build -o ../build/plantd-state $(BUILD_ARGS) .; \
 	popd >/dev/null
 
-test: test-pre test-state
+test: test-pre test-core test-state
 
 test-pre: ; $(info $(M) Testing projects...)
+
+test-core:
+	@pushd core >/dev/null; \
+	go test ./... -v; \
+	popd >/dev/null
 
 test-state:
 	@pushd state >/dev/null; \

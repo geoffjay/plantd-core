@@ -84,6 +84,17 @@ func (s *Store) DeleteScope(scope string) (err error) {
 	return nil
 }
 
+func (s *Store) ListAllScope() (list []string) {
+	_ = s.db.View(func(tx *bolt.Tx) error {
+		_ = tx.ForEach(func(name []byte, b *bolt.Bucket) error {
+			list = append(list, string(name))
+			return nil
+		})
+		return nil
+	})
+	return
+}
+
 // DebugScope prints the contents of a bucket using the debug log level.
 func (s *Store) DebugScope(scope string) {
 	_ = s.db.View(func(tx *bolt.Tx) error {
