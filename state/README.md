@@ -56,7 +56,7 @@ from gi.repository import Pd
 
 client = Pd.Client.new("tcp://127.0.0.1:7200")
 
-service = "org.plantd.Jupyter"
+service = "org.plantd.Test"
 messages = [
     ("create-scope", json.dumps({"service": service})),
     ("set", json.dumps({"service": service, "key": "foo", "value": "oof"})),
@@ -79,14 +79,37 @@ The data sink can be tested with a source from `libplantd`.
 ```python
 import time
 
+
 # eg. if,
 # frontend (XSUB) on @tcp://127.0.0.1:11000
 # backend  (XPUB) on @tcp://127.0.0.1:11001 - plantd-state should be connected here
 
-source = Pd.Source.new(">tcp://localhost:11000", "")
+source = Pd.Source.new(">tcp://localhost:11000", "org.plantd.Test")
 source.start()
 for i in range(10):
     source.queue_message(f"{\"key\":\"foo\",\"value\":\"{i}\"}")
     time.sleep(.5)
 source.stop()
+```
+
+The above assumes that a scoped bucket already exists with the name
+`org.plantd.Test`, to set up a new bucket and publish to it the following could
+be used.
+
+```python
+import time
+
+
+client.send_request("org.plantd.State", "create-scope", json.dumps({"service": "org.plantd.Derp"}))
+source = Pd.Source.new(">tcp://localhost:11000", "org.plantd.Derp")
+time.sleep(.5)
+source.start()
+source.queue_message(f"derp")
+time.sleep(.1)
+source.queue_message(f"derp")
+time.sleep(.1)
+source.queue_message(f"derp")
+time.sleep(.5)
+source.stop()
+client.send_request("org.plantd.State", "delete-scope", json.dumps({"service": "org.plantd.Derp"}))
 ```
