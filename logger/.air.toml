@@ -2,9 +2,9 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "make build-state"
-bin = "build/plantd-state"
-full_bin = "PLANTD_STATE_LOG_LEVEL=debug build/plantd-state"
+cmd = "make build-logger"
+bin = "build/plantd-logger"
+full_bin = "PLANTD_LOGGER_LOG_LEVEL=debug build/plantd-logger"
 include_ext = ["go"]
 exclude_dir = [
   "broker",
@@ -13,10 +13,10 @@ exclude_dir = [
   "docs",
   "identity",
   "init",
-  "logger",
   "notebooks",
   "proxy",
   "scripts",
+  "state",
   "tmp",
 ]
 exclude_regex = ["_test.go"]

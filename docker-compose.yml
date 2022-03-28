@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  tsdb:
+    image: timescale/timescaledb:2.6.0-pg14
+    environment:
+      POSTGRES_DB: plantd_development
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: plantd
+    ports:
+      - '5432:5432'
+    restart: unless-stopped
+    volumes:
+      - tsdb_data:/var/lib/postgresql/data
+ 
+  grafana:
+    image: grafana/grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: plantd
+    ports:
+      - '3333:3000'
+    restart: unless-stopped
+    volumes:
+      # - ./.docker/grafana:/etc/grafana
+      - grafana_data:/var/lib/grafana
+
+  # questdb:
+  #   image: questdb/questdb
+  #   ports:
+  #     - '9000:9000'
+  #     - '8812:8812'
+  #   restart: unless-stopped
+  #   volumes:
+  #     - tsdb_data:/root/.questdb/db
+
+  # broker:
+  #   image: registry.gitlab.com/plantd/broker:staging
+  #   environment:
+  #     PLANTD_BROKER_LOG_LEVEL: debug
+  #     PLANTD_BROKER_LOG_FORMATTER: json
+  #   ports:
+  #     - '7200:7200'
+  #     - '11000:11000'
+  #     - '11001:11001'
+  #     - '12000:12000'
+  #     - '12001:12001'
+  #     - '13000:13000'
+  #     - '13001:13001'
+  #   restart: unless-stopped
+
+volumes:
+  tsdb_data:
+  grafana_data:

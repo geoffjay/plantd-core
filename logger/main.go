@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
-	"strconv"
 	"sync"
 	"syscall"
 
@@ -20,9 +19,7 @@ func main() {
 	processArgs()
 	initLogging()
 
-	port, _ := strconv.Atoi(util.Getenv("PORT", "5000"))
-	bind := util.Getenv("ADDRESS", "0.0.0.0")
-	app := NewService(port, bind)
+	app := NewService()
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	wg := &sync.WaitGroup{}
@@ -41,11 +38,11 @@ func main() {
 	cancelFunc()
 	wg.Wait()
 
-	log.Debug("proxy exiting")
+	log.Debug("logger exiting")
 }
 
 func initLogging() {
-	level := util.Getenv("PLANTD_PROXY_LOG_LEVEL", "info")
+	level := util.Getenv("PLANTD_LOGGER_LOG_LEVEL", "info")
 	if logLevel, err := log.ParseLevel(level); err == nil {
 		log.SetLevel(logLevel)
 	}

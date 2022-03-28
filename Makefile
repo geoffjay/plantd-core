@@ -20,7 +20,7 @@ lint: ; $(info $(M) Lint projects...)
 	@./scripts/utility go-lint proxy
 	@./scripts/utility go-lint state
 
-build: build-pre build-client build-identity build-proxy build-state
+build: build-pre build-client build-identity build-logger build-proxy build-state
 
 build-pre: ; $(info $(M) Building projects...)
 	@mkdir -p build/
@@ -33,6 +33,11 @@ build-client:
 build-identity:
 	@pushd identity >/dev/null; \
 	go build -o ../build/plantd-identity $(BUILD_ARGS) .; \
+	popd >/dev/null
+
+build-logger:
+	@pushd logger >/dev/null; \
+	go build -o ../build/plantd-logger $(BUILD_ARGS) .; \
 	popd >/dev/null
 
 build-proxy:
@@ -62,6 +67,9 @@ test-state:
 # live reload helpers
 dev-state:
 	@air -c state/.air.toml
+
+dev-logger:
+	@air -c logger/.air.toml
 
 # notebooks for new ideas
 jupyter:
