@@ -19,6 +19,9 @@ _check $? "golangci-lint" "core"
 ./scripts/utility go-lint identity
 _check $? "golangci-lint" "identity"
 
+./scripts/utility go-lint logger
+_check $? "golangci-lint" "logger"
+
 ./scripts/utility go-lint proxy
 _check $? "golangci-lint" "proxy"
 
