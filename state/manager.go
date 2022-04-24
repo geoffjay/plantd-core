@@ -42,7 +42,7 @@ func NewManager(endpoint string) *Manager {
 	return &Manager{
 		sinkEndpoint: endpoint,
 		sinkList:     make(map[string]*bus.Sink),
-		sinkChan:     make(chan event, 3),
+		sinkChan:     make(chan event, SinkChanBuffer),
 	}
 }
 

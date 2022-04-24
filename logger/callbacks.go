@@ -65,7 +65,10 @@ func (cb *metricSinkCallback) Handle(data []byte) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+
+	defer func() {
+		_ = tx.Rollback()
+	}()
 
 	stmt, err := tx.Prepare(sql)
 	if err != nil {

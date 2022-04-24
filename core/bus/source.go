@@ -55,7 +55,9 @@ func (s *Source) Run(ctx context.Context, wg *sync.WaitGroup) {
 	go func() {
 		for message := range s.queue {
 			frame := append([]byte(s.envelope), message...)
-			publisher.SendFrame(frame, 0)
+			if err := publisher.SendFrame(frame, 0); err != nil {
+				log.WithFields(s.defaultFields(err)).Panic("send error")
+			}
 		}
 	}()
 
