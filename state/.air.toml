@@ -17,6 +17,7 @@ exclude_dir = [
   "notebooks",
   "proxy",
   "scripts",
+  "templates",
   "tmp",
 ]
 exclude_regex = ["_test.go"]

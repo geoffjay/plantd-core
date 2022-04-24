@@ -226,6 +226,6 @@ func (cb *setCallback) Execute(msgBody string) ([]byte, error) {
 
 // Callback handles subscriber events on the state bus.
 func (cb *sinkCallback) Handle(data []byte) error {
-	log.WithFields(log.Fields{"data": string(data)}).Debugf("data received on state bus")
+	log.WithFields(log.Fields{"data": string(data)}).Debug("data received on state bus")
 	return nil
 }

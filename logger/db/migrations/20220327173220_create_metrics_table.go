@@ -25,7 +25,11 @@ func (m *CreateMetricsTable) Up() error {
 		return err
 	}
 
-	sql = "SELECT create_hypertable('metrics', 'time');"
+	sql = `
+  SELECT create_hypertable('metrics', 'time') WHERE NOT EXISTS (
+    SELECT * FROM information_schema.tables WHERE table_name = 'metrics'
+  );
+  `
 	_, err = m.DB.ExecContext(ctx, sql)
 	if err != nil {
 		return err

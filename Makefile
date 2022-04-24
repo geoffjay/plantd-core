@@ -5,6 +5,7 @@ BUILD_ARGS := -ldflags "-X core.VERSION=$(VERSION)"
 all: build
 
 -include init/setup.mk
+-include logger/manage.mk
 
 setup: deps hooks
 
@@ -17,6 +18,7 @@ hooks: ; $(info $(M) Installing commit hooks...)
 lint: ; $(info $(M) Lint projects...)
 	@./scripts/utility go-lint core
 	@./scripts/utility go-lint identity
+	@./scripts/utility go-lint logger
 	@./scripts/utility go-lint proxy
 	@./scripts/utility go-lint state
 

@@ -44,7 +44,7 @@ func (s *Source) Run(ctx context.Context, wg *sync.WaitGroup) {
 
 	defer wg.Done()
 
-	if publisher, err = czmq.NewPub(s.endpoint, s.envelope); err != nil {
+	if publisher, err = czmq.NewPub(s.endpoint); err != nil {
 		log.WithFields(s.defaultFields(err)).Panic("publisher create")
 	}
 	log.WithFields(s.defaultFields(nil)).Debug("created message queue source socket")
