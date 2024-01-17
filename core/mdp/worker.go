@@ -132,7 +132,7 @@ func (w *Worker) SetReconnect(reconnect time.Duration) {
 }
 
 // Recv send a reply, if any, to broker and waits for the next request.
-//nolint: funlen, cyclop, nestif
+// nolint: funlen, cyclop, nestif
 func (w *Worker) Recv(reply []string) (msg []string, err error) {
 	// format and send the reply if we were provided one
 	if len(reply) == 0 && w.expectReply {

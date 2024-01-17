@@ -48,7 +48,7 @@ func init() {
 	cliCmd.PersistentFlags().StringVar(
 		&cfgFile,
 		"config", "",
-		"config file (default is $HOME/.config/plantd/plant.yaml)",
+		"config file (default is $HOME/.config/plantd/client.yaml)",
 	)
 	cliCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 
