@@ -10,7 +10,7 @@ function __cmd_check {
 
 if __cmd_check "$GO_BIN"/golangci-lint; then
   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh \
-    | sh -s -- -b "$GO_BIN" v1.41.1
+    | sh -s -- -b "$GO_BIN" v1.55.2
 fi
 
 if __cmd_check "$GO_BIN"/air; then
@@ -20,4 +20,8 @@ fi
 
 if __cmd_check "$GO_BIN"/git-chglog; then
   go install github.com/git-chglog/git-chglog/cmd/git-chglog@latest
+fi
+
+if __cmd_check "$GO_BIN"/overmind; then
+  go install github.com/DarthSim/overmind/v2
 fi

@@ -16,16 +16,22 @@ hooks: ; $(info $(M) Installing commit hooks...)
 	@./scripts/install-hooks
 
 lint: ; $(info $(M) Lint projects...)
+	@./scripts/utility go-lint broker
 	@./scripts/utility go-lint core
 	@./scripts/utility go-lint identity
 	@./scripts/utility go-lint logger
 	@./scripts/utility go-lint proxy
 	@./scripts/utility go-lint state
 
-build: build-pre build-client build-identity build-logger build-proxy build-state
+build: build-pre build-broker build-client build-identity build-logger build-proxy build-state
 
 build-pre: ; $(info $(M) Building projects...)
 	@mkdir -p build/
+
+build-broker:
+	@pushd broker >/dev/null; \
+	go build -o ../build/plantd-broker $(BUILD_ARGS) .; \
+	popd >/dev/null
 
 build-client:
 	@pushd client >/dev/null; \
@@ -52,9 +58,14 @@ build-state:
 	go build -o ../build/plantd-state $(BUILD_ARGS) .; \
 	popd >/dev/null
 
-test: test-pre test-core test-state
+test: test-pre test-core test-broker test-state
 
 test-pre: ; $(info $(M) Testing projects...)
+
+test-broker:
+	@pushd broker >/dev/null; \
+	go test ./... -v; \
+	popd >/dev/null
 
 test-core:
 	@pushd core >/dev/null; \
@@ -67,6 +78,12 @@ test-state:
 	popd >/dev/null
 
 # live reload helpers
+dev:
+	@overmind start
+
+dev-broker:
+	@air -c broker/.air.toml
+
 dev-state:
 	@air -c state/.air.toml
 

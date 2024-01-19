@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
-	"strconv"
 	"sync"
 	"syscall"
 
@@ -16,41 +15,48 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var config brokerConfig
+
 func main() {
 	processArgs()
+	initConfig()
 	initLogging()
 
-	port, _ := strconv.Atoi(util.Getenv("PORT", "5000"))
-	bind := util.Getenv("ADDRESS", "0.0.0.0")
-	app := NewService(port, bind)
+	service := NewService(&config)
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	wg := &sync.WaitGroup{}
 
 	wg.Add(1)
-	go app.run(ctx, wg)
+	go service.Run(ctx, wg)
 
-	log.Debug("service started")
+	log.WithFields(log.Fields{"context": "main"}).Debug("starting")
 
 	termChan := make(chan os.Signal, 1)
 	signal.Notify(termChan, syscall.SIGINT, syscall.SIGTERM)
 	<-termChan
 
-	log.Debug("service terminated")
+	log.WithFields(log.Fields{"context": "main"}).Debug("terminated")
 
 	cancelFunc()
 	wg.Wait()
 
-	log.Debug("proxy exiting")
+	log.WithFields(log.Fields{"context": "main"}).Debug("exiting")
+}
+
+func initConfig() {
+	if err := core.LoadConfig("broker", &config); err != nil {
+		log.Fatalf("error reading config file: %s\n", err)
+	}
 }
 
 func initLogging() {
-	level := util.Getenv("PLANTD_PROXY_LOG_LEVEL", "info")
+	level := util.Getenv("PLANTD_BROKER_LOG_LEVEL", "info")
 	if logLevel, err := log.ParseLevel(level); err == nil {
 		log.SetLevel(logLevel)
 	}
 
-	format := util.Getenv("PLANTD_PROXY_LOG_FORMAT", "text")
+	format := util.Getenv("PLANTD_BROKER_LOG_FORMAT", "text")
 	if format == "json" {
 		log.SetFormatter(&log.JSONFormatter{})
 	}

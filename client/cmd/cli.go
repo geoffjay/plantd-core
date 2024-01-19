@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"fmt"
 	"log"
-	"os"
 
 	"github.com/geoffjay/plantd/core"
 
@@ -35,7 +33,6 @@ var (
 func Execute() {
 	if err := cliCmd.Execute(); err != nil {
 		log.Fatal(err)
-		os.Exit(1)
 	}
 }
 
@@ -52,7 +49,9 @@ func init() {
 	)
 	cliCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 
-	viper.BindPFlag("verbose", cliCmd.PersistentFlags().Lookup("verbose"))
+	if err := viper.BindPFlag("verbose", cliCmd.PersistentFlags().Lookup("verbose")); err != nil {
+		log.Fatal(err)
+	}
 	viper.SetDefault("verbose", false)
 }
 
@@ -66,9 +65,8 @@ func addCommands() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
-	err := core.LoadConfig("client", &config)
-	if err != nil {
-		fmt.Errorf("Fatal error reading config file: %s \n", err)
+	if err := core.LoadConfig("client", &config); err != nil {
+		log.Fatalf("error reading config file: %s\n", err)
 	}
 
 	endpoint = config.Server.Endpoint

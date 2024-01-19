@@ -1,6 +1,7 @@
 package core
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -28,6 +29,7 @@ func LoadConfig(name string, c interface{}) error {
 
 	file := os.Getenv(envConfig)
 	if file == "" {
+		// config.SetConfigName(strings.Join([]string{name, "yaml"}, "."))
 		config.SetConfigName(name)
 		config.AddConfigPath(".")
 		config.AddConfigPath(fmt.Sprintf("%s/.config/plantd", home))
@@ -66,4 +68,13 @@ func LoadConfig(name string, c interface{}) error {
 	}
 
 	return nil
+}
+
+// Marshal converts a Config instance to a JSON string.
+func MarshalConfig(c Config) (string, error) {
+	bytes, err := json.Marshal(c)
+	if err != nil {
+		return "", err
+	}
+	return string(bytes), nil
 }
