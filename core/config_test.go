@@ -27,7 +27,7 @@ func buildConfig(t *testing.T, path string) *testConfig {
 	return &config
 }
 
-//nolint: funlen
+// nolint: funlen
 func TestLoadConfig(t *testing.T) {
 	emptyConfig := &testConfig{
 		Env: "",

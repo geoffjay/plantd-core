@@ -1,0 +1,39 @@
+name: lint
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  golangci:
+    name: lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ['core', 'identity', 'logger', 'proxy', 'state']
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: false
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -qq -y \
+            libczmq-dev \
+            libsodium-dev \
+            libzmq3-dev
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          working-directory: ${{ matrix.package }}
+          version: v1.55.2

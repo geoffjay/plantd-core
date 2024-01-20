@@ -34,14 +34,14 @@ func (suite *StoreTestSuite) TearDownSuite() {
 	suite.store.Unload()
 }
 
-//nolint: typecheck
+// nolint: typecheck
 func (suite *StoreTestSuite) TestStore_GetMissingKey() {
 	value, err := suite.store.Get("org.plantd.State.Test", "missing")
 	suite.Nil(err)
 	suite.Equal(value, "")
 }
 
-//nolint: typecheck
+// nolint: typecheck
 func (suite *StoreTestSuite) TestStore_SetGet() {
 	err := suite.store.Set("org.plantd.State.Test", "foo", "bar")
 	suite.Nil(err)
@@ -50,7 +50,7 @@ func (suite *StoreTestSuite) TestStore_SetGet() {
 	suite.Equal(value, "bar")
 }
 
-//nolint: typecheck
+// nolint: typecheck
 func (suite *StoreTestSuite) TestStore_Scope() {
 	var err error
 	err = suite.store.CreateScope("test")

@@ -80,7 +80,7 @@ func (b *Broker) GetWorkerInfo() []WorkerInfo {
 	return info
 }
 
-//nolint
+// nolint
 func initMonitor(socket *czmq.Sock) {
 	monitor := czmq.NewMonitor(socket)
 	defer monitor.Destroy()
@@ -180,7 +180,7 @@ func (b *Broker) Bind() (err error) {
 }
 
 // Run the service.
-//nolint: cyclop
+// nolint: cyclop
 func (b *Broker) Run(done chan bool) {
 	poller, _ := czmq.NewPoller(b.Socket)
 
@@ -239,7 +239,7 @@ func (b *Broker) Run(done chan bool) {
 
 // WorkerMsg processes one READY, REPLY, HEARTBEAT or DISCONNECT message sent
 // to the broker by a worker.
-//nolint: cyclop
+// nolint: cyclop
 func (b *Broker) WorkerMsg(sender string, msg []string) {
 	// at least, command
 	if len(msg) == 0 {
@@ -298,7 +298,7 @@ func (b *Broker) WorkerMsg(sender string, msg []string) {
 
 // ClientMsg processes a request coming from a client. We implement MMI requests
 // directly here (at present, we implement only the mmi.service request).
-//nolint: nestif
+// nolint: nestif
 func (b *Broker) ClientMsg(sender string, msg []string) {
 	// the message should contain the service name and message body
 	if len(msg) < 2 {

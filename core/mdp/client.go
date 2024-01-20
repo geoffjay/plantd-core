@@ -96,7 +96,7 @@ func (c *Client) Send(service string, request ...string) (err error) {
 // reply message or NULL if there was no reply. Does not attempt to recover
 // from a broker failure, this is not possible without storing all unanswered
 // requests and resending them all.
-//nolint: funlen, nestif
+// nolint: funlen, nestif
 func (c *Client) Recv() (msg []string, err error) {
 	// poll socket for a reply, with timeout
 	socket, perr := c.poller.Wait(int(c.timeout))

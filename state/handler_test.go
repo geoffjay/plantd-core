@@ -17,7 +17,7 @@ type testCallback struct {
 }
 
 func (cb *testCallback) Execute(data string) ([]byte, error) {
-	return []byte(""), nil
+	return []byte(data), nil
 }
 
 func TestHandlerTestSuite(t *testing.T) {
@@ -29,7 +29,7 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.handler.AddCallback("test", &testCallback{name: "test"})
 }
 
-//nolint: typecheck
+// nolint: typecheck
 func (suite *HandlerTestSuite) TestHandler_Get() {
 	callback, err := suite.handler.GetCallback("test")
 	assert.NotNil(suite.T(), callback, "callback exists for `test`")

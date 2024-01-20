@@ -89,18 +89,18 @@ func (s *Sink) Run(ctx context.Context, wg *sync.WaitGroup) {
 			if socket == nil {
 				log.Trace("poller timeout reached")
 				continue
-			} else {
-				log.Trace("poller received data")
-				data, _, rerr := socket.RecvFrame()
-				// TODO while more flag (_) is set
-				if rerr != nil {
-					log.Error(rerr)
-					continue
-				}
-				log.Trace("handling received data")
-				if err = s.handler.Callback.Handle(data); err != nil {
-					log.WithFields(log.Fields{"error": err}).Error("failed to handle message")
-				}
+			}
+
+			log.Trace("poller received data")
+			data, _, rerr := socket.RecvFrame()
+			// TODO while more flag (_) is set
+			if rerr != nil {
+				log.Error(rerr)
+				continue
+			}
+			log.Trace("handling received data")
+			if err = s.handler.Callback.Handle(data); err != nil {
+				log.WithFields(log.Fields{"error": err}).Error("failed to handle message")
 			}
 		}
 	}()
