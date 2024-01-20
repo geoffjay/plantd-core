@@ -1,6 +1,8 @@
 M := $(shell printf "\033[34;1m▶\033[0m")
 VERSION := $(shell git describe 2>/dev/null || echo "undefined")
+SHELL := /bin/bash
 BUILD_ARGS := -ldflags "-X core.VERSION=$(VERSION)"
+TEST_ARGS := $(shell if [ ! -z ${COVERAGE} ]; then echo "-race -coverprofile=coverage.out -covermode=atomic"; fi)
 
 all: build
 
@@ -61,6 +63,7 @@ build-state:
 test: test-pre test-core test-broker test-state
 
 test-pre: ; $(info $(M) Testing projects...)
+	@mkdir -p coverage/
 
 test-broker:
 	@pushd broker >/dev/null; \
@@ -69,12 +72,14 @@ test-broker:
 
 test-core:
 	@pushd core >/dev/null; \
-	go test ./... -v; \
+	go test $(TEST_ARGS) ./... -v; \
+	if [[ -f coverage.out ]]; then mv coverage.out ../coverage/core.out; fi; \
 	popd >/dev/null
 
 test-state:
 	@pushd state >/dev/null; \
-	go test ./... -v; \
+	go test $(TEST_ARGS) ./... -v; \
+	if [[ -f coverage.out ]]; then mv coverage.out ../coverage/state.out; fi; \
 	popd >/dev/null
 
 # live reload helpers
@@ -103,5 +108,6 @@ uninstall: ; $(info $(M) Uninstalling binaries...)
 
 clean: ; $(info $(M) Removing build files...)
 	@rm -rf build/
+	@rm -rf coverage/
 
 .PHONY: all build clean
