@@ -3,6 +3,7 @@ module github.com/geoffjay/plantd/logger
 go 1.21
 
 require (
+	github.com/geoffjay/plantd/core v0.0.0-20240120031930-de5686649da5
 	github.com/lib/pq v1.10.4
 	github.com/sirupsen/logrus v1.8.1
 )
@@ -22,7 +23,7 @@ require (
 	github.com/spf13/viper v1.10.1 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/zeromq/goczmq/v4 v4.2.1-0.20210413114303-4e50cfc0edc9 // indirect
-	golang.org/x/sys v0.0.0-20220325203850-36772127a21f // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
