@@ -1,5 +1,6 @@
 M := $(shell printf "\033[34;1m▶\033[0m")
 VERSION := $(shell git describe 2>/dev/null || echo "undefined")
+SHELL := /bin/bash
 BUILD_ARGS := -ldflags "-X core.VERSION=$(VERSION)"
 TEST_ARGS := $(shell if [ ! -z ${COVERAGE} ]; then echo "-race -coverprofile=coverage.out -covermode=atomic"; fi)
 
