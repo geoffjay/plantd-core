@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/geoffjay/plantd/graph/badge.svg?token=sHiAEpWC7e)](https://codecov.io/gh/geoffjay/plantd)
 [![License MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://img.shields.io/badge/License-MIT-brightgreen.svg)
 
 ---
