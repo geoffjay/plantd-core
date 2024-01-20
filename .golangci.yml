@@ -1,9 +1,6 @@
 run:
   tests: true
 
-  skip-files:
-    - broker/pkg/service/const.go
-
 output:
   format: colored-line-number
   print-issued-lines: true
@@ -60,13 +57,12 @@ linters-settings:
   forbidigo:
     forbid:
       - ^print.*$
-    exclude_godoc_examples: false
+    exclude-godoc-examples: false
 
   funlen:
     lines: 60
     statements: 40
-    ignored-files:
-      - "*_test.go"
+    ignore-comments: true
 
   goconst:
     min-len: 3

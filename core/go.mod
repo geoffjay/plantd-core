@@ -22,7 +22,7 @@ require (
 	github.com/stretchr/testify v1.7.1
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/zeromq/goczmq/v4 v4.2.1-0.20210413114303-4e50cfc0edc9
-	golang.org/x/sys v0.0.0-20220325203850-36772127a21f // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
