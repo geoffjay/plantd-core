@@ -2,7 +2,7 @@ M := $(shell printf "\033[34;1m▶\033[0m")
 VERSION := $(shell git describe 2>/dev/null || echo "undefined")
 SHELL := /bin/bash
 BUILD_ARGS := -ldflags "-X core.VERSION=$(VERSION)"
-TEST_ARGS := $(shell if [ ! -z ${COVERAGE} ]; then echo "-race -coverprofile=coverage.out -covermode=atomic"; fi)
+TEST_ARGS := $(shell if [ ! -z ${COVERAGE} ]; then echo "-race -coverprofile=coverage.txt -covermode=atomic"; fi)
 
 all: build
 
@@ -73,13 +73,13 @@ test-broker:
 test-core:
 	@pushd core >/dev/null; \
 	go test $(TEST_ARGS) ./... -v; \
-	if [[ -f coverage.out ]]; then mv coverage.out ../coverage/core.out; fi; \
+	if [[ -f coverage.txt ]]; then mv coverage.txt ../coverage/core.txt; fi; \
 	popd >/dev/null
 
 test-state:
 	@pushd state >/dev/null; \
 	go test $(TEST_ARGS) ./... -v; \
-	if [[ -f coverage.out ]]; then mv coverage.out ../coverage/state.out; fi; \
+	if [[ -f coverage.txt ]]; then mv coverage.txt ../coverage/state.txt; fi; \
 	popd >/dev/null
 
 # live reload helpers

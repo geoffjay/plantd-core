@@ -55,6 +55,15 @@ func TestUnwrap(t *testing.T) {
 	assert.Equal(t, "baz", tail[1])
 }
 
+func TestContains(t *testing.T) {
+	list := []string{"foo", "bar", "baz"}
+
+	assert.True(t, Contains(list, "foo"))
+	assert.True(t, Contains(list, "bar"))
+	assert.True(t, Contains(list, "baz"))
+	assert.False(t, Contains(list, "qux"))
+}
+
 func TestKeys(t *testing.T) {
 	list := make(map[string]string)
 	list["foo"] = "a"

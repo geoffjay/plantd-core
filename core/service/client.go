@@ -56,7 +56,8 @@ func (c *Client) sendMessage(id, message string, in interface{}, out interface{}
 	fmt.Printf("reply: %+v\n", reply)
 
 	// Deserialize reply into a response
-	return json.Unmarshal([]byte(reply[idx]), out)
+	err = json.Unmarshal([]byte(reply[idx]), out)
+	return err
 }
 
 type RawRequest map[string]interface{}
