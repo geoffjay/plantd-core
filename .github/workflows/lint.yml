@@ -13,6 +13,9 @@ jobs:
   golangci:
     name: lint
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: ['core', 'identity', 'logger', 'proxy', 'state']
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v4
@@ -22,4 +25,5 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
+          working-directory: ${{ matrix.package }}
           version: v1.55.2
