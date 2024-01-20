@@ -35,7 +35,7 @@ func init() {
 	stateCmd.AddCommand(stateSetCmd)
 }
 
-func get(cmd *cobra.Command, args []string) {
+func get(_ *cobra.Command, args []string) {
 	fmt.Println(endpoint)
 	client, err := plantd.NewClient(endpoint)
 	if err != nil {
@@ -55,4 +55,24 @@ func get(cmd *cobra.Command, args []string) {
 	fmt.Printf("%+v\n", response)
 }
 
-func set(cmd *cobra.Command, args []string) {}
+func set(_ *cobra.Command, args []string) {
+	fmt.Println(endpoint)
+	client, err := plantd.NewClient(endpoint)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	key := args[0]
+	value := args[1]
+	request := &plantd.RawRequest{
+		"service": "org.plantd.Client",
+		"key":     key,
+		"value":   value,
+	}
+	response, err := client.SendRawRequest("org.plantd.State", "state-set", request)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%+v\n", response)
+}
