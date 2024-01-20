@@ -14,7 +14,13 @@ jobs:
           go-version: '1.21.x'
 
       - name: Install dependencies
-        run: sudo apt-get -y install make libzmq3-dev libsodium-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -qq -y \
+            libczmq-dev \
+            libsodium-dev \
+            libzmq3-dev \
+            make
 
       - name: Build
         run: make
