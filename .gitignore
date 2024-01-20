@@ -15,6 +15,7 @@ cert/*.key
 
 /bin/
 /build/
+/coverage/
 /target/
-/vendor/
 /tmp/
+/vendor/
