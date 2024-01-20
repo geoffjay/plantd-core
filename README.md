@@ -21,7 +21,7 @@ used in the hopes that all the rest can be archived one day.
 make
 sudo make install
 # eg. to test one of the services
-LOG_LEVEL=debug PORT=8080 plantd-proxy
+PLANTD_PROXY_LOG_LEVEL=debug PORT=8080 plantd-proxy
 ```
 
 For additional service control steps see the contents of `init/` for
@@ -48,9 +48,15 @@ The list of projects that should be brought into this one:
 
 It's recommended that some common tooling and commit hooks be installed.
 
-
 ```shell
 make setup
+```
+
+Once complete you can start everything with `docker` and `overmind`.
+
+```shell
+docker compose up -d
+overmind start
 ```
 
 <!-- links -->

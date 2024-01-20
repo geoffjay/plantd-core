@@ -50,7 +50,7 @@ func initLogging() {
 
 func processArgs() {
 	if len(os.Args) > 1 {
-		r := regexp.MustCompile("^-v$|(-{2})?version$")
+		r := regexp.MustCompile("^-V$|(-{2})?version$")
 		if r.Match([]byte(os.Args[1])) {
 			fmt.Println(core.VERSION)
 		}
