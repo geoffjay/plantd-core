@@ -26,7 +26,15 @@ func TestHandlerTestSuite(t *testing.T) {
 
 func (suite *HandlerTestSuite) SetupSuite() {
 	suite.handler = NewHandler()
-	suite.handler.AddCallback("test", &testCallback{name: "test"})
+	err := suite.handler.AddCallback("test", &testCallback{name: "test"})
+	suite.NoError(err, "callback added successfully")
+}
+
+func (suite *HandlerTestSuite) TestHandler_Add() {
+	err := suite.handler.AddCallback("test", &testCallback{name: "test"})
+	suite.ErrorContains(err, "callback already exists")
+	err = suite.handler.AddCallback("foo", &testCallback{name: "foo"})
+	suite.NoError(err, "callback added successfully")
 }
 
 // nolint: typecheck
@@ -34,8 +42,8 @@ func (suite *HandlerTestSuite) TestHandler_Get() {
 	callback, err := suite.handler.GetCallback("test")
 	assert.NotNil(suite.T(), callback, "callback exists for `test`")
 	assert.Nil(suite.T(), err, "callback retrieve failed")
-	callback, err = suite.handler.GetCallback("foo")
-	assert.Nil(suite.T(), callback, "callback doesn't exist for `foo`")
+	callback, err = suite.handler.GetCallback("foo-get")
+	assert.Nil(suite.T(), callback, "callback doesn't exist for `foo-get`")
 	assert.NotNil(suite.T(), err, "callback retrieval failed for unavailable name")
-	assert.Equal(suite.T(), err.Error(), "callback not found for foo")
+	assert.Equal(suite.T(), err.Error(), "callback not found for foo-get")
 }

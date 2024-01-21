@@ -11,16 +11,16 @@ package service
 // 	"github.com/testcontainers/testcontainers-go/wait"
 // )
 //
+// // nolint: funlen
 // func TestClient(t *testing.T) {
 // 	ctx := context.Background()
 //
-// 	newNetwork, err := network.New(ctx, network.WithCheckDuplicate())
+// 	sharedNetwork, err := network.New(ctx, network.WithCheckDuplicate())
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
 //
-// 	networkName := newNetwork.Name
-// 	aliases := []string{"broker"}
+// 	networkName := sharedNetwork.Name
 //
 // 	// TODO: when broker has been migrated to this repo it should be used instead
 // 	brokerContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
@@ -31,7 +31,7 @@ package service
 // 			WaitingFor:   wait.ForListeningPort("9797/tcp"),
 // 			Networks:     []string{networkName},
 // 			NetworkAliases: map[string][]string{
-// 				networkName: aliases,
+// 				networkName: {"broker"},
 // 			},
 // 			Env: map[string]string{
 // 				"PLANTD_BROKER_ENDPOINT":  "tcp://*:9797",
@@ -46,8 +46,12 @@ package service
 //
 // 	workerContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 // 		ContainerRequest: testcontainers.ContainerRequest{
-// 			Image: "org.plantd.mock.worker:latest",
-// 			Name:  "worker",
+// 			Image:    "org.plantd.module.echo:latest",
+// 			Name:     "worker",
+// 			Networks: []string{networkName},
+// 			NetworkAliases: map[string][]string{
+// 				networkName: {"worker"},
+// 			},
 // 		},
 // 		Started: true,
 // 	})
@@ -64,7 +68,7 @@ package service
 // 			t.Fatal(err)
 // 		}
 //
-// 		require.NoError(t, newNetwork.Remove(ctx))
+// 		require.NoError(t, sharedNetwork.Remove(ctx))
 // 	})
 //
 // 	// Test NewClient

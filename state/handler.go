@@ -26,8 +26,12 @@ func NewHandler() *Handler {
 }
 
 // AddCallback sets a callback by `name`.
-func (h *Handler) AddCallback(name string, callback HandlerCallback) {
+func (h *Handler) AddCallback(name string, callback HandlerCallback) error {
+	if _, found := h.callbacks[name]; found {
+		return fmt.Errorf("callback already exists")
+	}
 	h.callbacks[name] = callback
+	return nil
 }
 
 // GetCallback retrieves a callback by `name`.

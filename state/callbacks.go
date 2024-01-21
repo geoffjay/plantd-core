@@ -57,7 +57,8 @@ func (cb *createScopeCallback) Execute(msgBody string) ([]byte, error) {
 	}
 
 	if scope, found = request["service"].(string); !found {
-		return []byte(`{"error": "service required for create-scope request"}`), errors.New("`service` missing")
+		err := errors.New("`service` missing")
+		return []byte(`{"error": "service required for create-scope request"}`), err
 	}
 
 	if cb.store.HasScope(scope) {
@@ -94,7 +95,8 @@ func (cb *deleteScopeCallback) Execute(msgBody string) ([]byte, error) {
 	}
 
 	if scope, found = request["service"].(string); !found {
-		return []byte(`{"error": "service required for delete-scope request"}`), errors.New("`service` missing")
+		err := errors.New("`service` missing")
+		return []byte(`{"error": "service required for delete-scope request"}`), err
 	}
 
 	if !cb.store.HasScope(scope) {
@@ -133,11 +135,13 @@ func (cb *deleteCallback) Execute(msgBody string) ([]byte, error) {
 	}
 
 	if scope, found = request["service"].(string); !found {
-		return []byte(`{"error": "service required for delete request"}`), errors.New("`service` missing")
+		err := errors.New("`service` missing")
+		return []byte(`{"error": "service required for delete request"}`), err
 	}
 
 	if key, found = request["key"].(string); !found {
-		return []byte(`{"error": "key required for delete request"}`), errors.New("`key` missing")
+		err := errors.New("`key` missing")
+		return []byte(`{"error": "key required for delete request"}`), err
 	}
 
 	err := cb.store.Delete(scope, key)
@@ -167,11 +171,13 @@ func (cb *getCallback) Execute(msgBody string) ([]byte, error) {
 	}
 
 	if scope, found = request["service"].(string); !found {
-		return []byte(`{"error": "service required for get request"}`), errors.New("`service` missing")
+		err := errors.New("`service` missing")
+		return []byte(`{"error": "service required for get request"}`), err
 	}
 
 	if key, found = request["key"].(string); !found {
-		return []byte(`{"error": "key required for get request"}`), errors.New("`key` missing")
+		err := errors.New("`key` missing")
+		return []byte(`{"error": "key required for get request"}`), err
 	}
 
 	value, err := cb.store.Get(scope, key)
@@ -203,15 +209,18 @@ func (cb *setCallback) Execute(msgBody string) ([]byte, error) {
 	}
 
 	if scope, found = request["service"].(string); !found {
-		return []byte(`{"error": "service required for get request"}`), errors.New("`service` missing")
+		err := errors.New("`service` missing")
+		return []byte(`{"error": "service required for get request"}`), err
 	}
 
 	if key, found = request["key"].(string); !found {
-		return []byte(`{"error": "key required for get request"}`), errors.New("`key` missing")
+		err := errors.New("`key` missing")
+		return []byte(`{"error": "key required for get request"}`), err
 	}
 
 	if value, found = request["value"].(string); !found {
-		return []byte(`{"error": "value required for get request"}`), errors.New("`value` missing")
+		err := errors.New("`value` missing")
+		return []byte(`{"error": "value required for get request"}`), err
 	}
 
 	err := cb.store.Set(scope, key, value)
