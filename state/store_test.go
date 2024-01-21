@@ -20,7 +20,7 @@ func TestStoreLoad(t *testing.T) {
 		panic(err)
 	}
 	err := store.Load("./tmp")
-	assert.NotNil(t, err)
+	assert.Error(t, err, "should not be able to load a directory")
 	os.Remove("./tmp")
 }
 
@@ -49,51 +49,61 @@ func (suite *StoreTestSuite) TearDownSuite() {
 // nolint: typecheck
 func (suite *StoreTestSuite) TestStore_GetMissingKey() {
 	value, err := suite.store.Get("org.plantd.State.Test", "missing")
-	suite.Nil(err)
+	suite.NoError(err, err)
 	suite.Equal(value, "")
 }
 
 // nolint: typecheck
 func (suite *StoreTestSuite) TestStore_SetGet() {
 	err := suite.store.Set("org.plantd.State.Test", "foo", "bar")
-	suite.Nil(err)
+	suite.NoError(err, err)
 	value, err := suite.store.Get("org.plantd.State.Test", "foo")
-	suite.Nil(err)
+	suite.NoError(err, err)
 	suite.Equal(value, "bar")
+}
+
+func (suite *StoreTestSuite) TestStore_Delete() {
+	err := suite.store.Set("org.plantd.State.Test", "foo", "bar")
+	suite.NoError(err, err)
+	err = suite.store.Delete("org.plantd.State.Test", "foo")
+	suite.NoError(err, err)
+	value, err := suite.store.Get("org.plantd.State.Test", "foo")
+	suite.NoError(err, err)
+	suite.Equal(value, "")
 }
 
 // nolint: typecheck
 func (suite *StoreTestSuite) TestStore_Scope() {
 	var err error
 	err = suite.store.CreateScope("test")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 	err = suite.store.DeleteScope("fake")
-	suite.NotNil(err, err)
+	suite.Error(err, "should not be able to delete a non existing scope")
 	err = suite.store.DeleteScope("test")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 }
 
 func (suite *StoreTestSuite) TestStore_HasScope() {
 	err := suite.store.CreateScope("test")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 	ok := suite.store.HasScope("test")
 	suite.Equal(ok, true)
 	err = suite.store.DeleteScope("test")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 }
 
 func (suite *StoreTestSuite) TestStore_ListAllScope() {
 	var err error
 	err = suite.store.CreateScope("test1")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 	err = suite.store.CreateScope("test2")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 	scopes := suite.store.ListAllScope()
 	suite.Equal(len(scopes), 3)
 	suite.Equal(scopes[1], "test1")
 	suite.Equal(scopes[2], "test2")
 	err = suite.store.DeleteScope("test1")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 	err = suite.store.DeleteScope("test2")
-	suite.Nil(err, err)
+	suite.NoError(err, err)
 }

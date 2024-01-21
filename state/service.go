@@ -34,12 +34,28 @@ func (s *Service) setupStore() {
 }
 
 func (s *Service) setupHandler() {
+	var err error
 	s.handler = NewHandler()
-	s.RegisterCallback("create-scope", &createScopeCallback{name: "create-scope", store: s.store, manager: s.manager})
-	s.RegisterCallback("delete-scope", &deleteScopeCallback{name: "delete-scope", store: s.store, manager: s.manager})
-	s.RegisterCallback("delete", &deleteCallback{name: "delete", store: s.store})
-	s.RegisterCallback("get", &getCallback{name: "get", store: s.store})
-	s.RegisterCallback("set", &setCallback{name: "set", store: s.store})
+	err = s.RegisterCallback("create-scope", &createScopeCallback{name: "create-scope", store: s.store, manager: s.manager})
+	if err != nil {
+		panic(err)
+	}
+	err = s.RegisterCallback("delete-scope", &deleteScopeCallback{name: "delete-scope", store: s.store, manager: s.manager})
+	if err != nil {
+		panic(err)
+	}
+	err = s.RegisterCallback("delete", &deleteCallback{name: "delete", store: s.store})
+	if err != nil {
+		panic(err)
+	}
+	err = s.RegisterCallback("get", &getCallback{name: "get", store: s.store})
+	if err != nil {
+		panic(err)
+	}
+	err = s.RegisterCallback("set", &setCallback{name: "set", store: s.store})
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (s *Service) setupWorker() {
@@ -144,6 +160,9 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 }
 
 // RegisterCallback is a pointless wrapper around the handler.
-func (s *Service) RegisterCallback(name string, callback HandlerCallback) {
-	s.handler.AddCallback(name, callback)
+func (s *Service) RegisterCallback(name string, callback HandlerCallback) error {
+	if err := s.handler.AddCallback(name, callback); err != nil {
+		return err
+	}
+	return nil
 }
