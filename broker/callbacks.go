@@ -18,6 +18,7 @@ type servicesCallback struct {
 	name string
 }
 
+// nolint: unused
 type sinkCallback struct{}
 
 // Execute callback function to handle `service` requests.
@@ -71,6 +72,7 @@ func (cb *servicesCallback) Execute(msgBody string) ([]byte, error) {
 }
 
 // Callback handles subscriber events on the state bus.
+// nolint: unused
 func (cb *sinkCallback) Handle(data []byte) error {
 	log.WithFields(log.Fields{"data": string(data)}).Debug("data received on state bus")
 	return nil

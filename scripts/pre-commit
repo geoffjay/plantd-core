@@ -9,9 +9,8 @@ function _check {
 
 echo "Running pre-commit hooks"
 
-# TODO: add when broker is brought in
-# ./scripts/utility go-lint broker
-# _check $? "golangci-lint" "broker"
+./scripts/utility go-lint broker
+_check $? "golangci-lint" "broker"
 
 ./scripts/utility go-lint core
 _check $? "golangci-lint" "core"

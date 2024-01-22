@@ -20,6 +20,7 @@ func buildConfig(t *testing.T, path string) *brokerConfig {
 	return config
 }
 
+// nolint: funlen
 func TestLoadConfig(t *testing.T) {
 	emptyConfig := &brokerConfig{
 		Env:               "",

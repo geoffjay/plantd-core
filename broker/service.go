@@ -14,8 +14,9 @@ import (
 type Service struct {
 	config  *brokerConfig
 	handler *Handler
-	broker  *mdp.Broker
-	worker  *mdp.Worker
+	// nolint: unused
+	broker *mdp.Broker
+	worker *mdp.Worker
 }
 
 // NewService creates an instance of the service.
@@ -37,6 +38,7 @@ func NewService(config *brokerConfig) *Service {
 	}
 }
 
+// nolint: unused
 func (s *Service) setupBroker() {
 	//  s.broker := service.NewBroker(config)
 	// if broker == nil {
@@ -91,6 +93,7 @@ func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 //   log.WithFields(log.Fields{"context": "broker"}).Debug("exiting")
 // }
 
+// nolint: funlen
 func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 	var err error
 
