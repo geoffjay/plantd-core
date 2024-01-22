@@ -59,6 +59,11 @@ test: test-pre test-core test-state
 test-pre: ; $(info $(M) Testing projects...)
 	@mkdir -p coverage/
 
+test-integration:
+	@pushd core >/dev/null; \
+	go test --tags=integration ./... -v; \
+	popd >/dev/null
+
 test-core:
 	@pushd core >/dev/null; \
 	go test $(TEST_ARGS) ./... -v; \

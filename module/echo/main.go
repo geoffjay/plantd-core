@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/geoffjay/plantd/core/mdp"
+	"github.com/geoffjay/plantd/core/util"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -18,7 +19,9 @@ type Service struct {
 
 func (s *Service) setup() {
 	var err error
-	if s.worker, err = mdp.NewWorker("tcp://broker:9797", "org.plantd.Test"); err != nil {
+
+	endpoint := util.Getenv("PLANTD_BROKER_ENDPOINT", "tcp://127.0.0.1:9797")
+	if s.worker, err = mdp.NewWorker(endpoint, "org.plantd.module.Echo"); err != nil {
 		log.WithFields(
 			log.Fields{"err": err},
 		).Panic("failed to setup message queue worker")
@@ -72,10 +75,10 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 				}).Debug("processing message")
 				var data []byte
 				switch msgType {
-				case "service-test":
+				case "echo":
 					log.Tracef("part: %s", part)
 					// pong
-					data = []byte("service-test")
+					data = []byte(part)
 					log.Tracef("data: %s", data)
 				default:
 					log.Error("invalid message type provided")

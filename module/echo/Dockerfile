@@ -1,7 +1,9 @@
 # Image for the echo plantd module.
 #
 # create: docker build -t org.plantd.module.echo:latest .
-# run:    docker run -it --rm --name echo org.plantd.module.echo:latest
+# run:    docker run -it --rm --name echo \
+#           -e PLANTD_BROKER_ENDPOINT=tcp://host.docker.internal:9797 \
+#           org.plantd.module.echo:latest
 # push:   docker push org.plantd.module.echo:latest
 
 # Build stage

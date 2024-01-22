@@ -8,8 +8,13 @@ import (
 	"github.com/geoffjay/plantd/core/mdp"
 )
 
+type Connection interface {
+	Send(service string, request ...string) (err error)
+	Recv() (reply []string, err error)
+}
+
 type Client struct {
-	conn *mdp.Client
+	conn Connection
 }
 
 // Establish a connection using the ZeroMQ API device.
