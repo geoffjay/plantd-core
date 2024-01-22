@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/geoffjay/plantd/core"
 
@@ -35,7 +34,6 @@ var (
 func Execute() {
 	if err := cliCmd.Execute(); err != nil {
 		log.Fatal(err)
-		os.Exit(1)
 	}
 }
 
@@ -57,6 +55,7 @@ func init() {
 }
 
 func addCommands() {
+	cliCmd.AddCommand(echoCmd)
 	// cliCmd.AddCommand(jobCmd)
 	cliCmd.AddCommand(stateCmd)
 

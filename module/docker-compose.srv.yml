@@ -16,3 +16,14 @@ services:
       - '13000:13000'
       - '13001:13001'
     restart: unless-stopped
+
+  echo:
+    image: org.plantd.module.echo:latest
+    environment:
+      PLANTD_BROKER_ENDPOINT: 'tcp://broker:9797'
+      PLANTD_MODULE_ECHO_LOG_LEVEL: debug
+      PLANTD_MODULE_ECHO_PORT: 5001
+      PLANTD_MODULE_ECHO_ADDRESS: '0.0.0.0'
+    ports:
+      - '5001:5001'
+    restart: unless-stopped
