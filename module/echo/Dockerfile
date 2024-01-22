@@ -1,6 +1,8 @@
 # Image for the echo plantd module.
 #
-# create: docker build -t org.plantd.module.echo:latest .
+# When building from the root of the project:
+#
+# create: docker build -t org.plantd.module.echo:latest -f module/echo/Dockerfile .
 # run:    docker run -it --rm --name echo \
 #           -e PLANTD_BROKER_ENDPOINT=tcp://host.docker.internal:9797 \
 #           org.plantd.module.echo:latest
@@ -25,7 +27,7 @@ RUN apk update \
 RUN mkdir /app
 COPY . /app/
 WORKDIR /app
-RUN go build -o echo main.go
+RUN go build -o echo ./module/echo
 
 # Final stage
 FROM alpine:3.19
@@ -38,4 +40,5 @@ RUN apk update \
 
 COPY --from=build /app/echo /usr/bin/echo
 
+EXPOSE 5001
 CMD [ "/usr/bin/echo" ]

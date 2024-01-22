@@ -8,7 +8,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/network"
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
@@ -16,29 +18,29 @@ import (
 func TestClient_Integration(t *testing.T) {
 	ctx := context.Background()
 
-	// sharedNetwork, err := network.New(
-	// 	ctx,
-	// 	network.WithCheckDuplicate(),
-	// 	// network.WithAttachable(),
-	// 	// network.WithInternal(),
-	// )
-	// if err != nil {
-	// 	t.Fatal(err)
-	// }
+	sharedNetwork, err := network.New(
+		ctx,
+		network.WithCheckDuplicate(),
+		// network.WithAttachable(),
+		network.WithInternal(),
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	// networkName := sharedNetwork.Name
+	networkName := sharedNetwork.Name
 
 	// TODO: when broker has been migrated to this repo it should be used instead
 	brokerContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image: "registry.gitlab.com/plantd/broker:staging",
-			// Name:         "broker",
+			Image:        "registry.gitlab.com/plantd/broker:staging",
+			Name:         "broker",
 			ExposedPorts: []string{"9797/tcp"},
 			WaitingFor:   wait.ForListeningPort("9797/tcp"),
-			// Networks:     []string{networkName},
-			// NetworkAliases: map[string][]string{
-			// 	networkName: {"broker"},
-			// },
+			Networks:     []string{networkName},
+			NetworkAliases: map[string][]string{
+				networkName: {"broker"},
+			},
 			Env: map[string]string{
 				"PLANTD_BROKER_ENDPOINT":  "tcp://*:9797",
 				"PLANTD_BROKER_LOG_LEVEL": "debug",
@@ -52,15 +54,17 @@ func TestClient_Integration(t *testing.T) {
 
 	workerContainer, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image: "org.plantd.module.echo:latest",
-			// Name:  "worker",
-			// WaitingFor: wait.ForLog("waiting for request"),
-			// Networks: []string{networkName},
-			// NetworkAliases: map[string][]string{
-			// 	networkName: {"worker"},
-			// },
+			Image:        "org.plantd.module.echo:latest",
+			Name:         "worker",
+			ExposedPorts: []string{"5001/tcp"},
+			// WaitingFor:   wait.ForHTTP("/api/v1/health"),
+			WaitingFor: wait.ForListeningPort("5001/tcp"),
+			Networks:   []string{networkName},
+			NetworkAliases: map[string][]string{
+				networkName: {"worker"},
+			},
 			Env: map[string]string{
-				"PLANTD_BROKER_ENDPOINT": "tcp://host.testcontainers.internal:9797",
+				"PLANTD_BROKER_ENDPOINT": "tcp://broker:9797",
 			},
 		},
 		Started: true,
@@ -78,7 +82,7 @@ func TestClient_Integration(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		// require.NoError(t, sharedNetwork.Remove(ctx))
+		require.NoError(t, sharedNetwork.Remove(ctx))
 	})
 
 	// Test NewClient

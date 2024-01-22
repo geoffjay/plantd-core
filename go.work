@@ -5,6 +5,7 @@ use (
 	./core
 	./identity
 	./logger
+	./module/echo
 	./proxy
 	./state
 )
