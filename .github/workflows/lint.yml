@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: ['core', 'identity', 'logger', 'proxy', 'state']
+        package: ['broker', 'core', 'identity', 'logger', 'proxy', 'state']
     steps:
       - uses: actions/checkout@v3
 
