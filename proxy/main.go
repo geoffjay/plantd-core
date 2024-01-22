@@ -20,8 +20,8 @@ func main() {
 	processArgs()
 	initLogging()
 
-	port, _ := strconv.Atoi(util.Getenv("PORT", "5000"))
-	bind := util.Getenv("ADDRESS", "0.0.0.0")
+	port, _ := strconv.Atoi(util.Getenv("PLANTD_PROXY_PORT", "5000"))
+	bind := util.Getenv("PLANTD_PROXY_ADDRESS", "0.0.0.0")
 	app := NewService(port, bind)
 
 	ctx, cancelFunc := context.WithCancel(context.Background())

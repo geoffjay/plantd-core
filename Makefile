@@ -60,20 +60,31 @@ build-state:
 	go build -o ../build/plantd-state $(BUILD_ARGS) .; \
 	popd >/dev/null
 
+build-module-echo:
+	@pushd module/echo >/dev/null; \
+	go build -o ../../build/plantd-module-echo $(BUILD_ARGS) .; \
+	popd >/dev/null
+
 test: test-pre test-core test-broker test-state
 
 test-pre: ; $(info $(M) Testing projects...)
 	@mkdir -p coverage/
 
-test-broker:
-	@pushd broker >/dev/null; \
-	go test ./... -v; \
+test-integration:
+	@pushd core >/dev/null; \
+	go test --tags=integration ./... -v; \
 	popd >/dev/null
 
 test-core:
 	@pushd core >/dev/null; \
 	go test $(TEST_ARGS) ./... -v; \
 	if [[ -f coverage.txt ]]; then mv coverage.txt ../coverage/core.txt; fi; \
+	popd >/dev/null
+
+test-broker:
+	@pushd broker >/dev/null; \
+	go test $(TEST_ARGS) ./... -v; \
+	if [[ -f coverage.txt ]]; then mv coverage.txt ../coverage/broker.txt; fi; \
 	popd >/dev/null
 
 test-state:

@@ -56,6 +56,7 @@ func init() {
 }
 
 func addCommands() {
+	cliCmd.AddCommand(echoCmd)
 	// cliCmd.AddCommand(jobCmd)
 	cliCmd.AddCommand(stateCmd)
 

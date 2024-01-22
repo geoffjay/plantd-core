@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/geoffjay/plantd/core/http"
+
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -31,7 +33,7 @@ func (s *Service) run(ctx context.Context, wg *sync.WaitGroup) {
 		r := gin.New()
 
 		r.Use(gin.Recovery())
-		r.Use(loggerMiddleware())
+		r.Use(http.LoggerMiddleware())
 
 		initializeRoutes(r)
 
