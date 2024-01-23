@@ -2,9 +2,9 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "make build-logger"
-bin = "build/plantd-logger"
-full_bin = "PLANTD_LOGGER_LOG_LEVEL=debug build/plantd-logger"
+cmd = "make build-proxy"
+bin = "build/plantd-proxy"
+full_bin = "PLANTD_PROXY_LOG_LEVEL=debug build/plantd-proxy"
 include_ext = ["go"]
 exclude_dir = [
   "broker",
@@ -13,9 +13,9 @@ exclude_dir = [
   "docs",
   "identity",
   "init",
+  "logger",
   "module",
   "notebooks",
-  "proxy",
   "scripts",
   "state",
   "templates",

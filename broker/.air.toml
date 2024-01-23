@@ -13,6 +13,7 @@ exclude_dir = [
   "identity",
   "init",
   "logger",
+  "module",
   "notebooks",
   "proxy",
   "scripts",

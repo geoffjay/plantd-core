@@ -1,12 +1,12 @@
-# Image for the echo plantd module.
+# Image for the plantd broker service.
 #
 # When building from the root of the project:
 #
-# create: docker build -t geoffjay/plantd-module-echo:latest -f module/echo/Dockerfile .
-# run:    docker run -it --rm --name echo \
-#           -e PLANTD_BROKER_ENDPOINT=tcp://host.docker.internal:9797 \
-#           geoffjay/plantd-module-echo:latest
-# push:   docker push geoffjay/plantd-module-echo:latest
+# create: docker build -t geoffjay/plantd-broker:latest -f broker/Dockerfile .
+# run:    docker run -it --rm --name broker \
+#           -e PLANTD_BROKER_ENDPOINT=tcp://*:9797 \
+#           geoffjay/plantd-broker:latest
+# push:   docker push geoffjay/plantd-broker:latest
 
 # Build stage
 FROM golang:1.21.6-alpine3.19 AS build
@@ -27,7 +27,7 @@ RUN apk update \
 RUN mkdir /app
 COPY . /app/
 WORKDIR /app
-RUN go build -o echo ./module/echo
+RUN make build-broker
 
 # Final stage
 FROM alpine:3.19
@@ -38,7 +38,7 @@ RUN apk update \
         zeromq \
         czmq
 
-COPY --from=build /app/echo /usr/bin/echo
+COPY --from=build /app/build/plantd-broker /usr/bin/broker
 
-EXPOSE 5001
-CMD [ "/usr/bin/echo" ]
+EXPOSE 9797
+CMD [ "/usr/bin/broker" ]

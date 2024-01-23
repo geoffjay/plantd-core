@@ -1,3 +1,5 @@
 broker: make dev-broker
-state: make dev-state
+identity: make dev-identity
 logger: make dev-logger
+proxy: make dev-proxy
+state: make dev-state

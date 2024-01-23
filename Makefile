@@ -100,11 +100,40 @@ dev:
 dev-broker:
 	@air -c broker/.air.toml
 
-dev-state:
-	@air -c state/.air.toml
+dev-identity:
+	@air -c identity/.air.toml
 
 dev-logger:
 	@air -c logger/.air.toml
+
+dev-proxy:
+	@air -c proxy/.air.toml
+
+dev-state:
+	@air -c state/.air.toml
+
+# docker helpers
+docker: docker-pre docker-broker docker-state docker-logger docker-proxy docker-module-echo
+
+docker-pre: ; $(info $(M) Building docker images)
+
+docker-broker:
+	@docker build -t geoffjay/plantd-broker -f broker/Dockerfile .
+
+docker-identity:
+	@docker build -t geoffjay/plantd-identity -f identity/Dockerfile .
+
+docker-logger:
+	@docker build -t geoffjay/plantd-logger -f logger/Dockerfile .
+
+docker-proxy:
+	@docker build -t geoffjay/plantd-proxy -f proxy/Dockerfile .
+
+docker-state:
+	@docker build -t geoffjay/plantd-state -f state/Dockerfile .
+
+docker-module-echo:
+	@docker build -t geoffjay/plantd-module-echo -f module/echo/Dockerfile .
 
 # notebooks for new ideas
 jupyter:

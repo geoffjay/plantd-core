@@ -2,17 +2,17 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "make build-logger"
-bin = "build/plantd-logger"
-full_bin = "PLANTD_LOGGER_LOG_LEVEL=debug build/plantd-logger"
+cmd = "make build-identity"
+bin = "build/plantd-identity"
+full_bin = "PLANTD_IDENTITY_LOG_LEVEL=debug build/plantd-identity"
 include_ext = ["go"]
 exclude_dir = [
   "broker",
   "build",
   "client",
   "docs",
-  "identity",
   "init",
+  "logger",
   "module",
   "notebooks",
   "proxy",
