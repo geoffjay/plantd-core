@@ -4,12 +4,13 @@ tmp_dir = "tmp"
 [build]
 cmd = "make build-state"
 bin = "build/plantd-state"
-full_bin = "PLANTD_STATE_LOG_LEVEL=debug build/plantd-state"
+full_bin = "build/plantd-state"
 include_ext = ["go"]
 exclude_dir = [
   "broker",
   "build",
   "client",
+  "coverage",
   "docs",
   "identity",
   "init",

@@ -4,12 +4,13 @@ tmp_dir = "tmp"
 [build]
 cmd = "make build-identity"
 bin = "build/plantd-identity"
-full_bin = "PLANTD_IDENTITY_LOG_LEVEL=debug build/plantd-identity"
+full_bin = "build/plantd-identity"
 include_ext = ["go"]
 exclude_dir = [
   "broker",
   "build",
   "client",
+  "coverage",
   "docs",
   "init",
   "logger",

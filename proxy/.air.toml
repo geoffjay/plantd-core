@@ -4,12 +4,13 @@ tmp_dir = "tmp"
 [build]
 cmd = "make build-proxy"
 bin = "build/plantd-proxy"
-full_bin = "PLANTD_PROXY_LOG_LEVEL=debug build/plantd-proxy"
+full_bin = "build/plantd-proxy"
 include_ext = ["go"]
 exclude_dir = [
   "broker",
   "build",
   "client",
+  "coverage",
   "docs",
   "identity",
   "init",

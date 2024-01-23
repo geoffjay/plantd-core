@@ -4,12 +4,13 @@ tmp_dir = "tmp"
 [build]
 cmd = "make build-logger"
 bin = "build/plantd-logger"
-full_bin = "PLANTD_LOGGER_LOG_LEVEL=debug build/plantd-logger"
+full_bin = "build/plantd-logger"
 include_ext = ["go"]
 exclude_dir = [
   "broker",
   "build",
   "client",
+  "coverage",
   "docs",
   "identity",
   "init",

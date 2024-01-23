@@ -4,11 +4,12 @@ tmp_dir = "tmp"
 [build]
 cmd = "make build-broker"
 bin = "build/plantd-broker"
-full_bin = "PLANTD_BROKER_LOG_LEVEL=debug build/plantd-broker"
+full_bin = "build/plantd-broker"
 include_ext = ["go"]
 exclude_dir = [
   "build",
   "client",
+  "coverage",
   "docs",
   "identity",
   "init",
