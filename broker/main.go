@@ -23,6 +23,7 @@ func main() {
 	initLogging()
 
 	service := NewService(&config)
+	fields := log.Fields{"service": "broker", "context": "main"}
 
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	wg := &sync.WaitGroup{}
@@ -30,18 +31,18 @@ func main() {
 	wg.Add(1)
 	go service.Run(ctx, wg)
 
-	log.WithFields(log.Fields{"context": "main"}).Debug("starting")
+	log.WithFields(fields).Debug("starting")
 
 	termChan := make(chan os.Signal, 1)
 	signal.Notify(termChan, syscall.SIGINT, syscall.SIGTERM)
 	<-termChan
 
-	log.WithFields(log.Fields{"context": "main"}).Debug("terminated")
+	log.WithFields(fields).Debug("terminated")
 
 	cancelFunc()
 	wg.Wait()
 
-	log.WithFields(log.Fields{"context": "main"}).Debug("exiting")
+	log.WithFields(fields).Debug("exiting")
 }
 
 func initConfig() {

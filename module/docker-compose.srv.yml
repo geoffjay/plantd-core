@@ -5,7 +5,7 @@ services:
     image: registry.gitlab.com/plantd/broker:staging
     environment:
       PLANTD_BROKER_LOG_LEVEL: debug
-      PLANTD_BROKER_LOG_FORMATTER: json
+      PLANTD_BROKER_LOG_FORMAT: json
       PLANTD_BROKER_ENDPOINT: 'tcp://*:9797'
     ports:
       - '9797:9797'
