@@ -11,6 +11,8 @@ import (
 func buildConfig(t *testing.T, path string) *brokerConfig {
 	var config *brokerConfig
 
+	os.Unsetenv("PLANTD_BROKER_ENDPOINT")
+
 	_ = os.Setenv("PLANTD_BROKER_CONFIG", path)
 	err := core.LoadConfig("broker", &config)
 	if err != nil {
