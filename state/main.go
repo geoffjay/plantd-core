@@ -46,6 +46,11 @@ func initLogging() {
 	if logLevel, err := log.ParseLevel(level); err == nil {
 		log.SetLevel(logLevel)
 	}
+
+	format := util.Getenv("PLANTD_STATE_LOG_FORMAT", "text")
+	if format == "json" {
+		log.SetFormatter(&log.JSONFormatter{})
+	}
 }
 
 func processArgs() {

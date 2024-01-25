@@ -1,0 +1,13 @@
+---
+version: "1"
+
+env: "testing"
+endpoint: "tcp://*:7200"
+client-endpoint: "tcp://localhost:7200"
+heartbeat-liveness: 3
+heartbeat-interval: 2500000
+
+log:
+  debug: true
+  formatter: "text"
+  level: "debug"

@@ -60,7 +60,8 @@ func (s *Service) setupHandler() {
 
 func (s *Service) setupWorker() {
 	var err error
-	if s.worker, err = mdp.NewWorker("tcp://127.0.0.1:7200", "org.plantd.State"); err != nil {
+	endpoint := util.Getenv("PLANTD_STATE_BROKER_ENDPOINT", "tcp://127.0.0.1:9797")
+	if s.worker, err = mdp.NewWorker(endpoint, "org.plantd.State"); err != nil {
 		log.WithFields(log.Fields{"err": err}).Panic("failed to setup message queue worker")
 	}
 }

@@ -18,16 +18,22 @@ hooks: ; $(info $(M) Installing commit hooks...)
 	@./scripts/install-hooks
 
 lint: ; $(info $(M) Lint projects...)
+	@./scripts/utility go-lint broker
 	@./scripts/utility go-lint core
 	@./scripts/utility go-lint identity
 	@./scripts/utility go-lint logger
 	@./scripts/utility go-lint proxy
 	@./scripts/utility go-lint state
 
-build: build-pre build-client build-identity build-logger build-proxy build-state
+build: build-pre build-broker build-client build-identity build-logger build-proxy build-state
 
 build-pre: ; $(info $(M) Building projects...)
 	@mkdir -p build/
+
+build-broker:
+	@pushd broker >/dev/null; \
+	go build -o ../build/plantd-broker $(BUILD_ARGS) .; \
+	popd >/dev/null
 
 build-client:
 	@pushd client >/dev/null; \
@@ -59,7 +65,7 @@ build-module-echo:
 	go build -o ../../build/plantd-module-echo $(BUILD_ARGS) .; \
 	popd >/dev/null
 
-test: test-pre test-core test-state
+test: test-pre test-core test-broker test-state
 
 test-pre: ; $(info $(M) Testing projects...)
 	@mkdir -p coverage/
@@ -75,6 +81,12 @@ test-core:
 	if [[ -f coverage.txt ]]; then mv coverage.txt ../coverage/core.txt; fi; \
 	popd >/dev/null
 
+test-broker:
+	@pushd broker >/dev/null; \
+	go test $(TEST_ARGS) ./... -v; \
+	if [[ -f coverage.txt ]]; then mv coverage.txt ../coverage/broker.txt; fi; \
+	popd >/dev/null
+
 test-state:
 	@pushd state >/dev/null; \
 	go test $(TEST_ARGS) ./... -v; \
@@ -82,11 +94,46 @@ test-state:
 	popd >/dev/null
 
 # live reload helpers
-dev-state:
-	@air -c state/.air.toml
+dev:
+	@overmind start
+
+dev-broker:
+	@air -c broker/.air.toml
+
+dev-identity:
+	@air -c identity/.air.toml
 
 dev-logger:
 	@air -c logger/.air.toml
+
+dev-proxy:
+	@air -c proxy/.air.toml
+
+dev-state:
+	@air -c state/.air.toml
+
+# docker helpers
+docker: docker-pre docker-broker docker-state docker-logger docker-proxy docker-module-echo
+
+docker-pre: ; $(info $(M) Building docker images)
+
+docker-broker:
+	@docker build -t geoffjay/plantd-broker -f broker/Dockerfile .
+
+docker-identity:
+	@docker build -t geoffjay/plantd-identity -f identity/Dockerfile .
+
+docker-logger:
+	@docker build -t geoffjay/plantd-logger -f logger/Dockerfile .
+
+docker-proxy:
+	@docker build -t geoffjay/plantd-proxy -f proxy/Dockerfile .
+
+docker-state:
+	@docker build -t geoffjay/plantd-state -f state/Dockerfile .
+
+docker-module-echo:
+	@docker build -t geoffjay/plantd-module-echo -f module/echo/Dockerfile .
 
 # notebooks for new ideas
 jupyter:

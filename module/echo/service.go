@@ -32,7 +32,7 @@ func NewService(port int, bind string) *Service {
 func (s *Service) setup() {
 	var err error
 
-	endpoint := util.Getenv("PLANTD_BROKER_ENDPOINT", "tcp://127.0.0.1:9797")
+	endpoint := util.Getenv("PLANTD_MODULE_ECHO_BROKER_ENDPOINT", "tcp://127.0.0.1:9797")
 	if s.worker, err = mdp.NewWorker(endpoint, "org.plantd.module.Echo"); err != nil {
 		log.WithFields(log.Fields{
 			"module": "echo",

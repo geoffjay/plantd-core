@@ -16,7 +16,7 @@ import (
 func main() {
 	initLogging()
 
-	port, _ := strconv.Atoi(util.Getenv("PLANTD_MODULE_ECHO_PORT", "5001"))
+	port, _ := strconv.Atoi(util.Getenv("PLANTD_MODULE_ECHO_PORT", "5000"))
 	bind := util.Getenv("PLANTD_MODULE_ECHO_ADDRESS", "0.0.0.0")
 	service := NewService(port, bind)
 
@@ -44,5 +44,10 @@ func initLogging() {
 	level := util.Getenv("PLANTD_MODULE_ECHO_LOG_LEVEL", "info")
 	if logLevel, err := log.ParseLevel(level); err == nil {
 		log.SetLevel(logLevel)
+	}
+
+	format := util.Getenv("PLANTD_MODULE_ECHO_LOG_FORMAT", "text")
+	if format == "json" {
+		log.SetFormatter(&log.JSONFormatter{})
 	}
 }

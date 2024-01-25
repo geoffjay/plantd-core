@@ -2,12 +2,11 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "make build-state"
-bin = "build/plantd-state"
-full_bin = "build/plantd-state"
+cmd = "make build-broker"
+bin = "build/plantd-broker"
+full_bin = "build/plantd-broker"
 include_ext = ["go"]
 exclude_dir = [
-  "broker",
   "build",
   "client",
   "coverage",
@@ -19,6 +18,7 @@ exclude_dir = [
   "notebooks",
   "proxy",
   "scripts",
+  "state",
   "templates",
   "tmp",
 ]
