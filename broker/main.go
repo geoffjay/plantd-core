@@ -13,6 +13,7 @@ import (
 	"github.com/geoffjay/plantd/core/util"
 
 	log "github.com/sirupsen/logrus"
+	loki "github.com/yukitsune/lokirus"
 )
 
 var config brokerConfig
@@ -61,6 +62,28 @@ func initLogging() {
 	if format == "json" {
 		log.SetFormatter(&log.JSONFormatter{})
 	}
+
+	opts := loki.NewLokiHookOptions().WithLevelMap(
+		loki.LevelMap{log.PanicLevel: "critical"},
+	).WithFormatter(
+		&log.JSONFormatter{},
+	).WithStaticLabels(
+		loki.Labels{
+			"app":         "broker",
+			"environment": "development",
+		},
+	)
+
+	hook := loki.NewLokiHookWithOpts(
+		"http://localhost:3100",
+		opts,
+		log.InfoLevel,
+		log.WarnLevel,
+		log.ErrorLevel,
+		log.FatalLevel,
+	)
+
+	log.AddHook(hook)
 }
 
 func processArgs() {
