@@ -121,6 +121,11 @@ dev-proxy:
 dev-state:
 	@air -c state/.air.toml
 
+gen-app-apidocs:
+	@pushd app >/dev/null; \
+	swag init --dir "./,./handlers"; \
+	popd >/dev/null
+
 # docker helpers
 docker: docker-pre docker-broker docker-state docker-logger docker-proxy docker-module-echo
 

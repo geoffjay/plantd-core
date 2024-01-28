@@ -16,6 +16,13 @@ import (
 	loki "github.com/yukitsune/lokirus"
 )
 
+// @title Plantd Web Application
+// @version 1.0
+// @description The Plantd web application.
+// @contact.name Geoff Johnson
+// @contact.email geoff.jay@gmail.com
+// @license.name MIT
+// @license.url https://opensource.org/license/mit/
 func main() {
 	processArgs()
 	initLogging()

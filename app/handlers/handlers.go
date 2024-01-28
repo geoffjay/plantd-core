@@ -11,6 +11,11 @@ import (
 // SessionStore app wide session store.
 var SessionStore *session.Store
 
+// Index renders the application index page.
+//
+//	@Summary     Index page
+//	@Description The application index page
+//	@Tags        pages
 func Index(c *fiber.Ctx) error {
 	fields := log.Fields{
 		"service": "app",

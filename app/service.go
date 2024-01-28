@@ -112,8 +112,8 @@ func (s *service) runApp(ctx context.Context, wg *sync.WaitGroup) {
 		app.Use(recover.New())
 		app.Use(etag.New())
 		app.Use(limiter.New(limiter.Config{
-			Expiration: 10 * time.Second,
-			Max:        5,
+			Expiration: 30 * time.Second,
+			Max:        50,
 		}))
 
 		initializeRouter(app)
