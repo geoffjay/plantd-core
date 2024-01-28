@@ -1,0 +1,6 @@
+---
+env: development
+client-endpoint: tcp://localhost:9797
+log:
+  formatter: json
+  level: debug

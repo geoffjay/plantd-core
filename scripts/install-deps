@@ -25,3 +25,7 @@ fi
 if __cmd_check "$GO_BIN"/overmind; then
   go install github.com/DarthSim/overmind/v2
 fi
+
+if __cmd_check "$GO_BIN"/swag; then
+  go install github.com/swaggo/swag/cmd/swag@latest
+fi

@@ -2,19 +2,19 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-cmd = "make build-logger"
-bin = "build/plantd-logger"
-full_bin = "build/plantd-logger"
+cmd = "make build-app"
+bin = "build/plantd-app"
+full_bin = "build/plantd-app"
 include_ext = ["go"]
 exclude_dir = [
-  "app",
-  "broker",
   "build",
+  "broker",
   "client",
   "coverage",
   "docs",
   "identity",
   "init",
+  "logger",
   "module",
   "notebooks",
   "proxy",

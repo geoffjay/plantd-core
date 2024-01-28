@@ -1,0 +1,16 @@
+{{ template "partials/header" .}}
+
+<h1>{{ .title }}</h1>
+
+{{ if .isAuthenticated }}
+  {{ .authorizedMessage }}
+{{ else }}
+  {{ .unauthorizedMessage }}
+  <form hx-post="/login" hx-swap="none">
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email">
+    <button hx-post="/login" hx-target="body">Login</button>
+  </form>
+{{ end }}
+
+{{ template "partials/footer" .}}

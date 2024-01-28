@@ -44,6 +44,12 @@ var mockWorkers = []mockWorker{
 }
 
 func initializeRoutes(router *gin.Engine) {
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"Title": "Main website",
+		})
+	})
+
 	v1 := router.Group("/api/v1")
 	{
 		v1.GET("/status", statusHandler)

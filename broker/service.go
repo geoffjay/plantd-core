@@ -3,16 +3,12 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 
 	"github.com/geoffjay/plantd/core"
 	"github.com/geoffjay/plantd/core/bus"
-	"github.com/geoffjay/plantd/core/http"
 	"github.com/geoffjay/plantd/core/mdp"
 
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -121,10 +117,9 @@ func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 		}()
 	}
 
-	wg.Add(3)
+	wg.Add(2)
 	go s.runWorker(ctx, wg)
 	go s.runBroker(ctx)
-	go s.runApp(ctx, wg)
 
 	<-ctx.Done()
 
@@ -226,34 +221,6 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 	s.worker.Shutdown()
 
 	log.WithFields(log.Fields{"context": "worker"}).Debug("exiting")
-}
-
-// App creates a web application to serve static website content.
-func (s *Service) runApp(ctx context.Context, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	staticContents := "./public"
-	bindAddress := "0.0.0.0"
-	bindPort := 4999
-
-	go func() {
-		gin.SetMode(gin.ReleaseMode)
-		r := gin.New()
-
-		r.Use(static.Serve("/", static.LocalFile(staticContents, false)))
-		r.Use(gin.Recovery())
-		r.Use(http.LoggerMiddleware())
-		r.Use(brokerMiddleware(s))
-
-		initializeRoutes(r)
-
-		if err := r.Run(fmt.Sprintf("%s:%d", bindAddress, bindPort)); err != nil {
-			panic(err)
-		}
-	}()
-
-	<-ctx.Done()
-	log.Debug("exiting web application")
 }
 
 // RegisterCallback is a pointless wrapper around the handler.

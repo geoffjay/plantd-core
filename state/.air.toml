@@ -7,6 +7,7 @@ bin = "build/plantd-state"
 full_bin = "build/plantd-state"
 include_ext = ["go"]
 exclude_dir = [
+  "app",
   "broker",
   "build",
   "client",
