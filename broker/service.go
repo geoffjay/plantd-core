@@ -118,8 +118,8 @@ func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 	}
 
 	wg.Add(2)
-	go s.runWorker(ctx, wg)
 	go s.runBroker(ctx)
+	go s.runWorker(ctx, wg)
 
 	<-ctx.Done()
 

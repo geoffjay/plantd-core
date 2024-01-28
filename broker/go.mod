@@ -4,10 +4,6 @@ go 1.21
 
 require (
 	github.com/geoffjay/plantd/core v0.0.0-20240125055833-a513a6b5fef0
-	github.com/gin-contrib/static v0.0.1
-	github.com/gin-gonic/gin v1.8.1
-	github.com/gofiber/fiber/v2 v2.52.0
-	github.com/gofiber/template/html/v2 v2.1.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/yukitsune/lokirus v1.0.1
 )
@@ -15,14 +11,10 @@ require (
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
-	github.com/gin-contrib/multitemplate v0.0.0-20231230012943-32b233489a81 // indirect
-	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
-	github.com/gofiber/template v1.8.2 // indirect
-	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/uuid v1.5.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
