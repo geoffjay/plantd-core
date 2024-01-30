@@ -31,7 +31,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Plantd Web Application",
-	Description:      "The Plantd web applicaton.",
+	Description:      "The Plantd web application.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

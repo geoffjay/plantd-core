@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "The Plantd web applicaton.",
+        "description": "The Plantd web application.",
         "title": "Plantd Web Application",
         "contact": {
             "name": "Geoff Johnson",

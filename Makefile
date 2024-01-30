@@ -123,7 +123,7 @@ dev-state:
 
 gen-app-apidocs:
 	@pushd app >/dev/null; \
-	swag init --dir "./,./handlers"; \
+	swag init --dir "./,./handlers" -g main.go; \
 	popd >/dev/null
 
 # docker helpers
