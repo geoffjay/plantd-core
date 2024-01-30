@@ -30,9 +30,11 @@ func initializeRouter(app *fiber.App) {
 		c.Set("Version", "v1")
 		return c.Next()
 	})
-	v1.Get("/status", defaultHandler)
-	v1.Get("/errors", defaultHandler)
-	v1.Get("/workers", defaultHandler)
-	v1.Get("/workers/:id", defaultHandler)
-	v1.Get("/info", defaultHandler)
+
+	broker := v1.Group("/broker")
+	broker.Get("/status", defaultHandler)
+	broker.Get("/errors", defaultHandler)
+	broker.Get("/workers", defaultHandler)
+	broker.Get("/workers/:id", defaultHandler)
+	broker.Get("/info", defaultHandler)
 }

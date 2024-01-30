@@ -4,8 +4,10 @@ go 1.21
 
 require (
 	github.com/geoffjay/plantd/core v0.0.0-20240120031930-de5686649da5
+	github.com/nelkinda/health-go v0.0.1
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.1
+	github.com/yukitsune/lokirus v1.0.1
 	go.etcd.io/bbolt v1.3.6
 )
 
@@ -17,6 +19,7 @@ require (
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
+	github.com/nelkinda/http-go v0.0.1 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
