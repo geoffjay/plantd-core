@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"sync"
@@ -14,17 +14,18 @@ type logConfig struct {
 	Level     string `mapstructure:"level"`
 }
 
-type appConfig struct {
+type Config struct {
 	core.Config
 	Env            string    `mapstructure:"env"`
 	ClientEndpoint string    `mapstructure:"client-endpoint"`
+	Secret         string    `mapstructure:"secret"`
 	Log            logConfig `mapstructure:"log"`
 }
 
 var lock = &sync.Mutex{}
-var instance *appConfig
+var instance *Config
 
-func getConfig() *appConfig {
+func GetConfig() *Config {
 	if instance == nil {
 		lock.Lock()
 		defer lock.Unlock()

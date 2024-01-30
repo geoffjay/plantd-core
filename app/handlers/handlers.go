@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/session"
+	jtoken "github.com/golang-jwt/jwt/v5"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -41,5 +42,21 @@ func Index(c *fiber.Ctx) error {
 		"authorizedMessage":   authorizedMessage,
 		"unauthorizedMessage": unauthorizedMessage,
 		"isAuthenticated":     isAuthenticated,
+	}, "layouts/base")
+}
+
+// Dashboard renders the dashboard page.
+func Dashboard(c *fiber.Ctx) error {
+	log.Debugf("ctx: %v", c)
+	user := c.Locals("user").(*jtoken.Token)
+	log.Debugf("user: %v", user)
+	claims := user.Claims.(jtoken.MapClaims)
+	email := claims["email"].(string)
+
+	log.Debugf("email: %s", email)
+	log.Debugf("claims: %v", claims)
+
+	return c.Render("dashboard", fiber.Map{
+		"email": email,
 	}, "layouts/base")
 }

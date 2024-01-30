@@ -5,9 +5,13 @@ go 1.21.5
 require (
 	github.com/geoffjay/plantd/core v0.0.0-20240125055833-a513a6b5fef0
 	github.com/goccy/go-json v0.10.2
+	github.com/gofiber/contrib/jwt v1.0.8
 	github.com/gofiber/fiber/v2 v2.52.0
+	github.com/gofiber/jwt/v3 v3.3.10
 	github.com/gofiber/swagger v0.1.14
 	github.com/gofiber/template/html/v2 v2.1.0
+	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/swaggo/swag v1.16.2
 	github.com/yukitsune/lokirus v1.0.1
@@ -15,6 +19,7 @@ require (
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
+	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect
 	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect

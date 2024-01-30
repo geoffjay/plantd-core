@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	conf "github.com/geoffjay/plantd/app/config"
 	"github.com/geoffjay/plantd/app/handlers"
 	"github.com/geoffjay/plantd/core/util"
 
@@ -54,7 +55,7 @@ func (s *service) run(ctx context.Context, wg *sync.WaitGroup) {
 func (s *service) runApp(ctx context.Context, wg *sync.WaitGroup) {
 	defer wg.Done()
 
-	config := getConfig()
+	config := conf.GetConfig()
 
 	fields := log.Fields{"service": "app", "context": "service.run-app"}
 	bindAddress := util.Getenv("PLANTD_APP_BIND_ADDRESS", "0.0.0.0")
