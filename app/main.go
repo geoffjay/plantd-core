@@ -28,6 +28,8 @@ func main() {
 	initLogging()
 
 	service := service{}
+	service.init()
+
 	fields := log.Fields{"service": "app", "context": "main"}
 
 	ctx, cancelFunc := context.WithCancel(context.Background())

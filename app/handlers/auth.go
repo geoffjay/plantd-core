@@ -1,15 +1,10 @@
 package handlers
 
 import (
-	"fmt"
-	"time"
-
-	conf "github.com/geoffjay/plantd/app/config"
 	"github.com/geoffjay/plantd/app/repository"
 	"github.com/geoffjay/plantd/app/types"
 
 	"github.com/gofiber/fiber/v2"
-	jtoken "github.com/golang-jwt/jwt/v5"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -21,13 +16,28 @@ func Register(c *fiber.Ctx) error {
 	return c.Send([]byte("Register"))
 }
 
+func LoginPage(c *fiber.Ctx) error {
+	csrfToken, ok := c.Locals("csrf").(string)
+	if !ok {
+		log.Info("csrf token not found")
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+
+	log.Infof("login page with csrf token: %s", csrfToken)
+
+	return c.Render("login", fiber.Map{
+		"Title": "Login",
+		"csrf":  csrfToken,
+	}, "layouts/base")
+}
+
 func Login(c *fiber.Ctx) error {
 	fields := log.Fields{
 		"service": "app",
 		"context": "handlers.login",
 	}
 
-	config := conf.GetConfig()
+	log.Info("login")
 
 	// Extract the credentials from the request body
 	loginRequest := new(types.LoginRequest)
@@ -37,60 +47,51 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	// sess, err := SessionStore.Get(c)
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	log.WithFields(fields).Debugf("email: %s", loginRequest.Email)
-	user, err := repository.FindUserByCredentials(loginRequest.Email, loginRequest.Password)
+	_, err := repository.FindUserByCredentials(loginRequest.Email, loginRequest.Password)
 	if err != nil {
 		log.WithFields(fields).Error(err)
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		csrfToken, ok := c.Locals("csrf").(string)
+		if !ok {
+			return c.SendStatus(fiber.StatusInternalServerError)
+		}
+
+		return c.Render("login", fiber.Map{
+			"title": "Login",
+			"csrf":  csrfToken,
+			"error": "Invalid credentials",
+		}, "layouts/base")
 	}
 
-	day := time.Hour * 24
-	claims := jtoken.MapClaims{
-		"ID":    user.ID,
-		"email": user.Email,
-		"exp":   time.Now().Add(day * 1).Unix(),
-	}
-	token := jtoken.NewWithClaims(jtoken.SigningMethodHS256, claims)
-	// Generate encoded token and send it as response.
-	t, err := token.SignedString([]byte(config.Secret))
+	log.WithFields(fields).Debugf("logging in: %s", loginRequest.Email)
+
+	session, err := SessionStore.Get(c)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	if err := session.Reset(); err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
+	}
+	session.Set("loggedIn", true)
+	if err := session.Save(); err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	// log.WithFields(fields).Debugf("logging in: %s", user.Email)
-	// sess.Set("email", user.Email)
-	// if err := sess.Save(); err != nil {
-	// 	panic(err)
-	// }
-
-	c.Set("Set-Cookie", fmt.Sprintf("token=%s", t))
 	c.Set("HX-Redirect", "/dashboard")
 
-	return c.JSON(types.LoginResponse{
-		Token: t,
-	})
+	return c.SendStatus(fiber.StatusOK)
 }
 
 func Logout(c *fiber.Ctx) error {
-	sess, err := SessionStore.Get(c)
+	session, err := SessionStore.Get(c)
 	if err != nil {
-		panic(err)
+		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	sess.Delete("name")
-
-	if err := sess.Destroy(); err != nil {
-		panic(err)
+	// Revoke users authentication
+	if err := session.Destroy(); err != nil {
+		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	return c.Redirect("/")
+	return c.Redirect("/login")
 }

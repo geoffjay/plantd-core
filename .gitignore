@@ -3,12 +3,12 @@
 tags
 
 .env
-.envrc
 .node-version
 
 cert/*.cr[lt]
 cert/*.csr
 cert/*.key
+cert/*.pem
 
 # plantd-state
 *.db
