@@ -7,6 +7,7 @@ bin = "build/plantd-proxy"
 full_bin = "build/plantd-proxy"
 include_ext = ["go"]
 exclude_dir = [
+  "app",
   "broker",
   "build",
   "client",

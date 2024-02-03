@@ -18,6 +18,7 @@ hooks: ; $(info $(M) Installing commit hooks...)
 	@./scripts/install-hooks
 
 lint: ; $(info $(M) Lint projects...)
+	@./scripts/utility go-lint app
 	@./scripts/utility go-lint broker
 	@./scripts/utility go-lint core
 	@./scripts/utility go-lint identity
@@ -25,10 +26,15 @@ lint: ; $(info $(M) Lint projects...)
 	@./scripts/utility go-lint proxy
 	@./scripts/utility go-lint state
 
-build: build-pre build-broker build-client build-identity build-logger build-proxy build-state
+build: build-pre build-app build-broker build-client build-identity build-logger build-proxy build-state
 
 build-pre: ; $(info $(M) Building projects...)
 	@mkdir -p build/
+
+build-app:
+	@pushd app >/dev/null; \
+	go build -o ../build/plantd-app $(BUILD_ARGS) .; \
+	popd >/dev/null
 
 build-broker:
 	@pushd broker >/dev/null; \
@@ -97,6 +103,9 @@ test-state:
 dev:
 	@overmind start
 
+dev-app:
+	@air -c app/.air.toml
+
 dev-broker:
 	@air -c broker/.air.toml
 
@@ -111,6 +120,11 @@ dev-proxy:
 
 dev-state:
 	@air -c state/.air.toml
+
+gen-app-apidocs:
+	@pushd app >/dev/null; \
+	swag init --dir "./,./handlers" -g main.go; \
+	popd >/dev/null
 
 # docker helpers
 docker: docker-pre docker-broker docker-state docker-logger docker-proxy docker-module-echo

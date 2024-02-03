@@ -1,0 +1,12 @@
+info:
+  contact:
+    email: geoff.jay@gmail.com
+    name: Geoff Johnson
+  description: The Plantd web application.
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
+  title: Plantd Web Application
+  version: "1.0"
+paths: {}
+swagger: "2.0"

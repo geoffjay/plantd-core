@@ -9,6 +9,9 @@ function _check {
 
 echo "Running pre-commit hooks"
 
+./scripts/utility go-lint app
+_check $? "golangci-lint" "app"
+
 ./scripts/utility go-lint broker
 _check $? "golangci-lint" "broker"
 

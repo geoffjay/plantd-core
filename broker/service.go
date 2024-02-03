@@ -4,15 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"strconv"
 	"sync"
 
 	"github.com/geoffjay/plantd/core"
 	"github.com/geoffjay/plantd/core/bus"
-	"github.com/geoffjay/plantd/core/http"
 	"github.com/geoffjay/plantd/core/mdp"
+	"github.com/geoffjay/plantd/core/util"
 
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
+	"github.com/nelkinda/health-go"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -122,15 +123,43 @@ func (s *Service) Run(ctx context.Context, wg *sync.WaitGroup) {
 	}
 
 	wg.Add(3)
-	go s.runWorker(ctx, wg)
+	go s.runHealth(ctx, wg)
 	go s.runBroker(ctx)
-	go s.runApp(ctx, wg)
+	go s.runWorker(ctx, wg)
 
 	<-ctx.Done()
 
 	s.broker.Close()
 
 	log.WithFields(log.Fields{"context": "service.run"}).Debug("exiting")
+}
+
+func (s *Service) runHealth(ctx context.Context, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	log.WithFields(log.Fields{"context": "service.run-health"}).Debug("starting")
+
+	port, err := strconv.Atoi(util.Getenv("PLANTD_BROKER_HEALTH_PORT", "8081"))
+	if err != nil {
+		log.WithFields(log.Fields{"error": err}).Fatal("failed to parse health port")
+	}
+
+	go func() {
+		h := health.New(
+			health.Health{
+				Version:   "1",
+				ReleaseID: "1.0.0-SNAPSHOT",
+			},
+		)
+		http.HandleFunc("/healthz", h.Handler)
+		if err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil); err != nil {
+			log.WithFields(log.Fields{"error": err}).Fatal("failed to start health server")
+		}
+	}()
+
+	<-ctx.Done()
+
+	log.WithFields(log.Fields{"context": "service.run-health"}).Debug("exiting")
 }
 
 func (s *Service) runBroker(ctx context.Context) {
@@ -226,34 +255,6 @@ func (s *Service) runWorker(ctx context.Context, wg *sync.WaitGroup) {
 	s.worker.Shutdown()
 
 	log.WithFields(log.Fields{"context": "worker"}).Debug("exiting")
-}
-
-// App creates a web application to serve static website content.
-func (s *Service) runApp(ctx context.Context, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	staticContents := "./public"
-	bindAddress := "0.0.0.0"
-	bindPort := 4999
-
-	go func() {
-		gin.SetMode(gin.ReleaseMode)
-		r := gin.New()
-
-		r.Use(static.Serve("/", static.LocalFile(staticContents, false)))
-		r.Use(gin.Recovery())
-		r.Use(http.LoggerMiddleware())
-		r.Use(brokerMiddleware(s))
-
-		initializeRoutes(r)
-
-		if err := r.Run(fmt.Sprintf("%s:%d", bindAddress, bindPort)); err != nil {
-			panic(err)
-		}
-	}()
-
-	<-ctx.Done()
-	log.Debug("exiting web application")
 }
 
 // RegisterCallback is a pointless wrapper around the handler.

@@ -1,0 +1,17 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "The Plantd web application.",
+        "title": "Plantd Web Application",
+        "contact": {
+            "name": "Geoff Johnson",
+            "email": "geoff.jay@gmail.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/license/mit/"
+        },
+        "version": "1.0"
+    },
+    "paths": {}
+}

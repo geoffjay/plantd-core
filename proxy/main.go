@@ -53,7 +53,14 @@ func initLogging() {
 
 	format := util.Getenv("PLANTD_PROXY_LOG_FORMAT", "text")
 	if format == "json" {
-		log.SetFormatter(&log.JSONFormatter{})
+		log.SetFormatter(&log.JSONFormatter{
+			TimestampFormat: "2006-01-02 15:04:05",
+		})
+	} else {
+		log.SetFormatter(&log.TextFormatter{
+			FullTimestamp:   true,
+			TimestampFormat: "2006-01-02 15:04:05",
+		})
 	}
 
 	opts := loki.NewLokiHookOptions().WithLevelMap(
