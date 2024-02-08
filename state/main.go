@@ -66,7 +66,7 @@ func initLogging() {
 		&log.JSONFormatter{},
 	).WithStaticLabels(
 		loki.Labels{
-			"app":         "broker",
+			"app":         "state",
 			"environment": "development",
 		},
 	)

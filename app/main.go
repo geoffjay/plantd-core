@@ -74,12 +74,10 @@ func initLogging() {
 		loki.LevelMap{log.PanicLevel: "critical"},
 	).WithFormatter(
 		&log.JSONFormatter{},
-	).WithStaticLabels(
-		loki.Labels{
-			"app":         "app",
-			"environment": "development",
-		},
-	)
+	).WithStaticLabels(loki.Labels{
+		"app":         "app",
+		"environment": "development",
+	})
 
 	lokiAddress := util.Getenv("PLANTD_APP_LOG_LOKI_ADDRESS", "http://localhost:3100")
 	hook := loki.NewLokiHookWithOpts(

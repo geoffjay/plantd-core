@@ -128,8 +128,8 @@ func initializeCert() tls.Certificate {
 	config := conf.GetConfig()
 	fields := log.Fields{"service": "app", "context": "service.init-cert"}
 
-	certFile := util.Getenv("PLANTD_APP_TLS_CERT", "cert.pem")
-	keyFile := util.Getenv("PLANTD_APP_TLS_KEY", "key.pem")
+	certFile := util.Getenv("PLANTD_APP_TLS_CERT", "cert/app-cert.pem")
+	keyFile := util.Getenv("PLANTD_APP_TLS_KEY", "cert/app-key.pem")
 
 	if config.Env == "development" || config.Env == "test" {
 		if _, err := os.Stat(certFile); os.IsNotExist(err) {
