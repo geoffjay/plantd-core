@@ -34,6 +34,7 @@ func Initialize(logConfig config.LogConfig) {
 	hook := loki.NewLokiHookWithOpts(
 		logConfig.Loki.Address,
 		opts,
+		// log.DebugLevel,
 		log.InfoLevel,
 		log.WarnLevel,
 		log.ErrorLevel,

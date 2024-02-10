@@ -60,7 +60,7 @@ var defaults = map[string]interface{}{
 	"log.formatter":    "text",
 	"log.level":        "info",
 	"log.loki.address": "http://localhost:3100",
-	"log.loki.labels":  map[string]string{"app": "state", "environment": "development"},
+	"log.loki.labels":  map[string]string{"app": "broker", "environment": "development"},
 	"service.id":       "org.plantd.Broker",
 }
 

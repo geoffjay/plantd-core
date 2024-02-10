@@ -20,7 +20,6 @@ func main() {
 
 	processArgs()
 	plog.Initialize(config.Log)
-	// initLogging(config.Log)
 
 	service := NewService()
 	fields := log.Fields{"service": "broker", "context": "main"}
@@ -44,42 +43,6 @@ func main() {
 
 	log.WithFields(fields).Debug("exiting")
 }
-
-// func initLogging(logConfig cfg.LogConfig) {
-// 	if logLevel, err := log.ParseLevel(logConfig.Level); err == nil {
-// 		log.SetLevel(logLevel)
-// 	}
-//
-// 	if logConfig.Formatter == "json" {
-// 		log.SetFormatter(&log.JSONFormatter{
-// 			TimestampFormat: "2006-01-02 15:04:05",
-// 		})
-// 	} else {
-// 		log.SetFormatter(&log.TextFormatter{
-// 			FullTimestamp:   true,
-// 			TimestampFormat: "2006-01-02 15:04:05",
-// 		})
-// 	}
-//
-// 	opts := loki.NewLokiHookOptions().WithLevelMap(
-// 		loki.LevelMap{log.PanicLevel: "critical"},
-// 	).WithFormatter(
-// 		&log.JSONFormatter{},
-// 	).WithStaticLabels(
-// 		logConfig.Loki.Labels,
-// 	)
-//
-// 	hook := loki.NewLokiHookWithOpts(
-// 		logConfig.Loki.Address,
-// 		opts,
-// 		log.InfoLevel,
-// 		log.WarnLevel,
-// 		log.ErrorLevel,
-// 		log.FatalLevel,
-// 	)
-//
-// 	log.AddHook(hook)
-// }
 
 func processArgs() {
 	if len(os.Args) > 1 {

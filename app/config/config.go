@@ -31,6 +31,8 @@ var defaults = map[string]interface{}{
 	"client-endpoint":          "tcp://localhost:9797",
 	"log.formatter":            "text",
 	"log.level":                "info",
+	"log.loki.address":         "http://localhost:3100",
+	"log.loki.labels":          map[string]string{"app": "app", "environment": "development"},
 	"cors.allow-credentials":   true,
 	"cors.allow-origins":       "*",
 	"cors.allow-headers":       "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers, Access-Control-Allow-Origin",
