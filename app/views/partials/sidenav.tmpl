@@ -1,25 +1,44 @@
-<div class="flex flex-col w-24 h-full border-r-1 border-r-slate">
-  <div class="flex w-full h-24">
-    <img
-      class="h-12 w-auth m-auto drop-shadow-[0_4px_4px_rgba(30,41,59,0.5)]"
-      src="/public/images/logo.svg"
-      alt="logo"
-    >
+<div
+  id="sidenav"
+  class="flex flex-col w-[256px] border-r-2 border-r-slate py-4 hidden"
+  xyz="fade left-100%"
+  _="init if localStorage.sidebarOpen == 'true' then remove .hidden"
+>
+  {{template "partials/sidenav_item"
+    args "path" "/broker" "icon" "paper-plane" "name" "Broker" "menu" "#broker-menu"
+  }}
+  <div id="broker-menu" class="hiden">
+    {{template "partials/sidenav_item" args "path" "/broker/test" "name" "Test"}}
+    {{template "partials/sidenav_item" args "path" "/broker/test" "name" "Test"}}
+    {{template "partials/sidenav_item" args "path" "/broker/test" "name" "Test"}}
+    {{template "partials/sidenav_item" args "path" "/broker/test" "name" "Test"}}
   </div>
-  <div class="flex w-full h-full">
-    <ul class="flex flex-col justify-center h-full w-full">
-      {{template "partials/sidenav_item" args "path" "/broker" "icon" "paper-plane"}}
-      {{template "partials/sidenav_item" args "path" "/logger" "icon" "floppy-disk"}}
-      {{template "partials/sidenav_item" args "path" "/proxy" "icon" "handshake"}}
-      {{template "partials/sidenav_item" args "path" "/state" "icon" "clone"}}
-      {{template "partials/sidenav_item" args "path" "/admin" "icon" "hand-back-fist"}}
-    </ul>
+
+  {{template "partials/sidenav_item"
+    args "path" "/logger" "icon" "floppy-disk" "name" "Logger" "menu" "#logger-menu"
+  }}
+  <div id="logger-menu" class="hidden">
+    {{template "partials/sidenav_item" args "path" "/logger/test" "name" "Test"}}
+    {{template "partials/sidenav_item" args "path" "/logger/test" "name" "Test"}}
   </div>
-  <div class="flex w-full h-24">
-    <img
-      class="h-12 w-auth m-auto drop-shadow-[0_4px_4px_rgba(30,41,59,0.5)]"
-      src="/public/images/logo.svg"
-      alt="logo"
-    >
+
+  {{template "partials/sidenav_item"
+    args "path" "/proxy" "icon" "handshake" "name" "Proxy" "menu" "#proxy-menu"
+  }}
+  <div id="proxy-menu" class="hidden">
+    {{template "partials/sidenav_item" args "path" "/proxy/test" "name" "Test"}}
+    {{template "partials/sidenav_item" args "path" "/proxy/test" "name" "Test"}}
   </div>
+
+  {{template "partials/sidenav_item"
+    args "path" "/state" "icon" "clone" "name" "State" "menu" "#state-menu"
+  }}
+  <div id="state-menu" class="hidden">
+    {{template "partials/sidenav_item" args "path" "/state/test" "name" "Test"}}
+    {{template "partials/sidenav_item" args "path" "/state/test" "name" "Test"}}
+  </div>
+
+  <div class="p-4"><hr /></div>
+
+  {{template "partials/sidenav_item" args "path" "/admin" "icon" "hand-back-fist" "name" "Admin"}}
 </div>

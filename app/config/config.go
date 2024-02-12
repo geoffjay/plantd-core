@@ -9,9 +9,7 @@ import (
 )
 
 // TODO:
-// - add a new configuration section for the session middleware
 // - add a new configuration section for the database
-// - assign defaults to the configuration values
 
 type Config struct {
 	cfg.Config
@@ -37,7 +35,7 @@ var defaults = map[string]interface{}{
 	"cors.allow-origins":       "*",
 	"cors.allow-headers":       "Origin, Content-Type, Accept, Content-Length, Accept-Language, Accept-Encoding, Connection, Authorization, Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers, Access-Control-Allow-Origin",
 	"cors.allow-methods":       "GET, POST, HEAD, PUT, DELETE, PATCH, OPTIONS",
-	"session.expiration":       "30m",
+	"session.expiration":       "2h",
 	"session.key-lookup":       "cookie:__Host-session",
 	"session.cookie-secure":    true,
 	"session.cookie-http-only": true,
