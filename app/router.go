@@ -1,16 +1,25 @@
 package main
 
 import (
+	"net/http"
+	"strings"
 	"time"
 
+	cfg "github.com/geoffjay/plantd/app/config"
 	_ "github.com/geoffjay/plantd/app/docs"
 	"github.com/geoffjay/plantd/app/handlers"
 	"github.com/geoffjay/plantd/core/util"
 
+	"github.com/gofiber/adaptor/v2"
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/csrf"
 	"github.com/gofiber/swagger"
 	log "github.com/sirupsen/logrus"
+)
+
+const (
+	Development = "development"
 )
 
 func csrfErrorHandler(c *fiber.Ctx, err error) error {
@@ -46,6 +55,10 @@ func csrfErrorHandler(c *fiber.Ctx, err error) error {
 	}
 }
 
+func httpHandler(f http.HandlerFunc) http.Handler {
+	return http.HandlerFunc(f)
+}
+
 func initializeRouter(app *fiber.App) {
 	staticContents := util.Getenv("PLANTD_APP_PUBLIC_PATH", "./app/public")
 
@@ -65,12 +78,10 @@ func initializeRouter(app *fiber.App) {
 	app.Static("/public", staticContents)
 
 	app.Get("/", handlers.Index)
-
 	app.Get("/login", csrfMiddleware, handlers.LoginPage)
 	app.Post("/login", csrfMiddleware, handlers.Login)
 	app.Get("/logout", handlers.Logout)
 	app.Post("/register", handlers.Register)
-
 	app.Get("/dashboard", csrfMiddleware, handlers.Dashboard)
 
 	// TODO: this is just here until the API is implemented.
@@ -78,6 +89,7 @@ func initializeRouter(app *fiber.App) {
 		return c.SendStatus(fiber.StatusOK)
 	}
 
+	// API routes
 	api := app.Group("/api")
 	api.Get("/docs/*", swagger.HandlerDefault)
 
@@ -92,4 +104,15 @@ func initializeRouter(app *fiber.App) {
 	broker.Get("/workers", defaultHandler)
 	broker.Get("/workers/:id", defaultHandler)
 	broker.Get("/info", defaultHandler)
+
+	// Development routes
+	config := cfg.GetConfig()
+	if strings.ToLower(config.Env) == Development {
+		log.Debug("Development routes enabled")
+
+		dev := app.Group("/dev")
+		dev.Get("/reload", adaptor.HTTPHandler(httpHandler(handlers.Reload)))
+		dev.Use("/reload2", handlers.UpgradeWS)
+		dev.Get("/reload2", websocket.New(handlers.ReloadWS))
+	}
 }

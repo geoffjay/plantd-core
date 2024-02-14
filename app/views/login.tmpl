@@ -20,11 +20,12 @@
       <div class="mt-2">
         <input
           id="email"
+          class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
           name="email"
           type="email"
           autocomplete="email"
+          placeholder="user@example.com"
           required
-          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
         >
       </div>
       <div class="flex items-center justify-between">
@@ -43,11 +44,12 @@
       <div class="mt-2">
         <input
           id="password"
+          class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
           name="password"
           type="password"
           autocomplete="current-password"
+          placeholder="********"
           required
-          class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-slate-600 sm:text-sm sm:leading-6"
         >
       </div>
       <input type="hidden" id="csrf" name="csrf" value="{{ .csrf }}">
