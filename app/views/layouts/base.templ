@@ -1,0 +1,56 @@
+package layouts
+
+templ head(title string) {
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="plantd web application" />
+        <meta name="referrer" content="origin" />
+
+        <link rel="icon" href="/public/favicon.ico"></link>
+        <link rel="manifest" href="/public/manifest.json"></link>
+        <link href="/public/css/tailwind.css" rel="stylesheet"></link>
+
+        <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/hyperscript.org@0.9.12" crossorigin></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></link>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@animxyz/core"></link>
+
+        <!-- shoelace web components -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.13.1/cdn/themes/light.css" />
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.13.1/cdn/shoelace-autoloader.js"></script>
+
+        <!-- htmx extensions -->
+        <script src="https://unpkg.com/htmx.org/dist/ext/sse.js" crossorigin></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/ws.js" crossorigin></script>
+        <script src="/public/js/htmx.ext.shoelace.js"></script>
+
+        if title != "" {
+            <title>Plantd - { title }</title>
+        } else {
+            <title>Plantd</title>
+        }
+    </head>
+}
+
+func title(ctx context.Context) string {
+    value := ctx.Value("title")
+    if value != nil {
+        return value.(string)
+    }
+    return ""
+}
+
+templ Base(contents templ.Component) {
+    <!DOCTYPE html>
+    <html lang="en">
+        @head(title(ctx))
+
+        <body class="h-screen" hx-ext="shoelace">
+            @contents
+        </body>
+    </html>
+}

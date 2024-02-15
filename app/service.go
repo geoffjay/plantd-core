@@ -10,6 +10,7 @@ import (
 	"encoding/pem"
 	"fmt"
 	"math/big"
+	"net/http"
 	"os"
 	"strconv"
 	"sync"
@@ -21,6 +22,7 @@ import (
 	"github.com/geoffjay/plantd/app/views"
 	"github.com/geoffjay/plantd/core/util"
 
+	"github.com/a-h/templ"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -106,8 +108,9 @@ func (s *service) runApp(ctx context.Context, wg *sync.WaitGroup) {
 		}))
 
 		initializeRouter(app)
-		cert := initializeCert()
+		app.Use(notFoundMiddleware)
 
+		cert := initializeCert()
 		tlsConfig := &tls.Config{Certificates: []tls.Certificate{cert}}
 		address := fmt.Sprintf("%s:%d", bindAddress, bindPort)
 
@@ -122,6 +125,10 @@ func (s *service) runApp(ctx context.Context, wg *sync.WaitGroup) {
 	<-ctx.Done()
 
 	log.WithFields(fields).Debug("exiting server")
+}
+
+func notFoundMiddleware(c *fiber.Ctx) error {
+	return views.Render(c, views.NotFound(), templ.WithStatus(http.StatusNotFound))
 }
 
 func initializeCert() tls.Certificate {
