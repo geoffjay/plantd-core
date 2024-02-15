@@ -8,8 +8,11 @@ import (
 	cfg "github.com/geoffjay/plantd/app/config"
 	_ "github.com/geoffjay/plantd/app/docs"
 	"github.com/geoffjay/plantd/app/handlers"
+	"github.com/geoffjay/plantd/app/views"
+	"github.com/geoffjay/plantd/app/views/pages"
 	"github.com/geoffjay/plantd/core/util"
 
+	"github.com/a-h/templ"
 	"github.com/gofiber/adaptor/v2"
 	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
@@ -43,12 +46,12 @@ func csrfErrorHandler(c *fiber.Ctx, err error) error {
 			"error": "403 Forbidden",
 		})
 	case "html":
+		c.Locals("title", "Error")
+		c.Locals("error", "403 Forbidden")
+		c.Locals("errorCode", "403")
+
 		// Return a 403 Forbidden response for HTML requests
-		return c.Status(fiber.StatusForbidden).Render("error", fiber.Map{
-			"Title":     "Error",
-			"Error":     "403 Forbidden",
-			"ErrorCode": "403",
-		}, "layouts/base")
+		return views.Render(c, pages.Error(), templ.WithStatus(http.StatusForbidden))
 	default:
 		// Return a 403 Forbidden response for all other requests
 		return c.Status(fiber.StatusForbidden).SendString("403 Forbidden")
@@ -77,12 +80,11 @@ func initializeRouter(app *fiber.App) {
 
 	app.Static("/public", staticContents)
 
-	app.Get("/", handlers.Index)
+	app.Get("/", csrfMiddleware, handlers.Index)
 	app.Get("/login", csrfMiddleware, handlers.LoginPage)
 	app.Post("/login", csrfMiddleware, handlers.Login)
 	app.Get("/logout", handlers.Logout)
 	app.Post("/register", handlers.Register)
-	app.Get("/dashboard", csrfMiddleware, handlers.Dashboard)
 
 	// TODO: this is just here until the API is implemented.
 	defaultHandler := func(c *fiber.Ctx) error {
@@ -115,4 +117,6 @@ func initializeRouter(app *fiber.App) {
 		dev.Use("/reload2", handlers.UpgradeWS)
 		dev.Get("/reload2", websocket.New(handlers.ReloadWS))
 	}
+
+	app.Use(handlers.NotFound)
 }

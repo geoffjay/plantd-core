@@ -1,0 +1,20 @@
+package components
+
+templ Sidenav() {
+	<div
+		id="sidenav"
+		class="flex flex-col w-[256px] border-r-2 border-r-slate py-4 hidden"
+		xyz="fade left-100%"
+		_="init if localStorage.sidebarOpen == 'true' then remove .hidden"
+	>
+		@SidenavItem("/api/v1/services", "Services", "paper-plane", "#services-menu")
+		<div id="services-menu" class="hidden">
+			@SidenavItem("/api/v1/services/broker", "Broker", nil, nil)
+			@SidenavItem("/api/v1/services/logger", "Logger", nil, nil)
+			@SidenavItem("/api/v1/services/proxy", "Proxy", nil, nil)
+			@SidenavItem("/api/v1/services/state", "State", nil, nil)
+		</div>
+		<div class="p-4"><hr/></div>
+		@SidenavItem("/admin", "Admin", "hand-back-fist", nil)
+	</div>
+}

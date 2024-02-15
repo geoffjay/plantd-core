@@ -1,0 +1,51 @@
+package components
+
+import "fmt"
+
+var itemClasses = []string{
+	"flex",
+	"flex-row",
+	"gap-4",
+	"w-full",
+	"h-10",
+	"items-center",
+	"py-2",
+	"px-4",
+	"z-0",
+	"text-slate-800",
+	"border-r-solid",
+	"border-r-2",
+	"border-white",
+	"hover:text-red-800",
+	"hover:border-red-800",
+	"hover:cursor-pointer",
+}
+
+var sidenavIconClasses = []string{
+	"fa-regular",
+	"fa-md",
+	"min-w-6",
+	"drop-shadow-[0_1px_1px_rgba(30,41,59,0.3)]",
+}
+
+templ SidenavItem(path, name string, icon, menu interface{}) {
+	<div
+		hx-get={ path }
+		hx-trigger="click"
+		hx-target="#main"
+		hx-swap="outerHTML"
+		class={ classes(itemClasses) }
+	>
+		if menu != nil {
+			<i class="fa-solid fa-caret-right fa-sm min-w-2 drop-shadow-[0_1px_1px_rgba(30,41,59,0.3)]"></i>
+		} else {
+			<div class="min-w-2"></div>
+		}
+		if icon != nil {
+			<i class={ classes(sidenavIconClasses, fmt.Sprintf("fa-%s", icon.(string))) }></i>
+		} else {
+			<div class="min-w-6"></div>
+		}
+		<p class="text-md">{ name }</p>
+	</div>
+}
