@@ -8,9 +8,9 @@ templ Sidenav() {
 		_="init if localStorage.sidebarOpen == 'true' then remove .hidden"
 	>
 		@SidenavItem("/api/v1/services", "Services", "paper-plane", "#services-menu")
-		<div id="services-menu" class="hidden">
+		<div id="services-menu">
 			@SidenavItem("/api/v1/services/broker", "Broker", nil, nil)
-			@SidenavItem("/api/v1/services/logger", "Logger", nil, nil)
+			@SidenavItem("/api/v1/services/logger", "Logger", "floppy-disk", nil)
 			@SidenavItem("/api/v1/services/proxy", "Proxy", nil, nil)
 			@SidenavItem("/api/v1/services/state", "State", nil, nil)
 		</div>
