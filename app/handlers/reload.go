@@ -25,15 +25,17 @@ func Reload(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("Transfer-Encoding", "chunked")
 
-	// select {
-	// case event := <-client.events:
-	event := <-client.events
-	fmt.Fprintf(w, "data: %s\n\n", event)
-	log.Debugf("data: %s\n", event)
-	// }
+	for event := range client.events {
+		// select {
+		// case event := <-client.events:
+		// event := <-client.events
+		fmt.Fprintf(w, "data: %s\n\n", event)
+		log.Debugf("data: %s\n", event)
+		// }
 
-	if f, ok := w.(http.Flusher); ok {
-		f.Flush()
+		if f, ok := w.(http.Flusher); ok {
+			f.Flush()
+		}
 	}
 }
 

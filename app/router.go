@@ -86,6 +86,8 @@ func initializeRouter(app *fiber.App) {
 	app.Get("/logout", handlers.Logout)
 	app.Post("/register", handlers.Register)
 
+	app.Get("/sse", handlers.ReloadSSE)
+
 	// TODO: this is just here until the API is implemented.
 	defaultHandler := func(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusOK)
@@ -116,6 +118,14 @@ func initializeRouter(app *fiber.App) {
 		dev.Get("/reload", adaptor.HTTPHandler(httpHandler(handlers.Reload)))
 		dev.Use("/reload2", handlers.UpgradeWS)
 		dev.Get("/reload2", websocket.New(handlers.ReloadWS))
+
+		// dev.Get("/connections", func(c *fiber.Ctx) error {
+		//     m := map[string]any{
+		// 	    "open-connections": app.Server().GetOpenConnectionsCount(),
+		// 	    "sessions":         len(currentSessions.sessions),
+		//     }
+		//     return c.JSON(m)
+		//    })
 	}
 
 	app.Use(handlers.NotFound)
